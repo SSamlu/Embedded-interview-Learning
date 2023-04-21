@@ -6,7 +6,7 @@
 
 int count[MAX_VALUE] = {0};
 
-void MemberAppearstTimesCheck(const int* item, int size) {
+void MemberAppearsTimesCheck(const int* item, int size) {
     for(int i; i < size; i++) {
         (*(count + item[i]))++;
     }
@@ -23,7 +23,7 @@ int main() {
     //int *arr = (int*) malloc(6 * sizeof(int));
     int arr[] = {1, 1, 2, 3, 4, 4};
     int arr_size = sizeof(arr)/sizeof(int);
-    MemberAppearstTimesCheck(arr, arr_size);
+    MemberAppearsTimesCheck(arr, arr_size);
     PrintData();
     return 0;
 }
