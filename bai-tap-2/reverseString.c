@@ -10,7 +10,8 @@ void CreateString(char* input) {
     printf("Nhap chuoi: ");
     fgets(input, MAX_LEN, stdin);
 }
-void ReverseString(char* input, struct Word* words, uint8_t* word_count, uint8_t len) {
+void splitWordsInString(char* input, struct Word* words, uint8_t* word_count) {
+    uint8_t len = 0;
     for (uint8_t i = 0; input[i] != '\0'; i++) {
         if (input[i] == ' ' || input[i] == '\n') {
             words[*word_count].arr = (char*)malloc(len + 1);
@@ -27,16 +28,25 @@ void ReverseString(char* input, struct Word* words, uint8_t* word_count, uint8_t
         }
     }
 }
+
+void reverseString(struct Word* words, uint8_t word_count) {
+    for (uint8_t i = 0; i < word_count / 2; i++) {
+        struct Word temp = words[i];
+        words[i] = words[word_count - i - 1];
+        words[word_count - i - 1] = temp;
+    }
+    
+}
 int main() {
     char input[MAX_LEN];
     struct Word words[MAX_LEN];
     uint8_t word_count = 0;
     CreateString(input);
-    uint8_t len = 0;
-    ReverseString(input, words, &word_count, len);
-    for (uint8_t i = word_count; i > 0; i--) {
-        printf("%s ", words[i-1].arr);
-        free(words[i-1].arr); 
+    splitWordsInString(input, words, &word_count);
+    reverseString(words, word_count);
+    for (uint8_t i = 0; i < word_count; i++) {
+        printf("%s ", words[i].arr);
+        free(words[i].arr); 
     }
     printf("\n");
 
