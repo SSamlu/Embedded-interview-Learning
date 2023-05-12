@@ -20,6 +20,8 @@ typedef struct {
  * Description: Create a array RaNdom with length random
  * Input:
  *      val - an Array value with datatype by user define
+ * Output:
+ *      none
 */
 
 void randomArrayGenerate(Array *val) {
@@ -39,8 +41,10 @@ void randomArrayGenerate(Array *val) {
  * Function: Swap
  * Description: swap two values ​​for each other
  * Input:
- *      i - an integer value with 1-byte length
- *      j - an integer value with 1-byte length
+ *      i - an pointer with integer and 1-byte length
+ *      j - an pointer with integer and 1-byte length
+ * Output:
+ *      none
 */
 void Swap(uint8_t* i, uint8_t* j) {
   uint8_t temp = *i; // create an variable `temp` and assign `j` value into `temp`
@@ -53,6 +57,8 @@ void Swap(uint8_t* i, uint8_t* j) {
  * Description: Sort an array with increasing value
  * Input:
  *      val - an Array value with datatype by user define
+ * Output:
+ *      none
 */
 void SortArray(Array *val) {
     for (int i = 0; i < val->length - 1; i++) {

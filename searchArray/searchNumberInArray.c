@@ -20,6 +20,8 @@
  *      lengthLeft  - an integer value
  *      right - an array with datatype integer
  *      lengthRight - an integer value
+ * Output:
+ *      none
 */
 
 void merge(int arr[], int left[], int lengthLeft, int right[], int lengthRight) {
@@ -48,6 +50,8 @@ void merge(int arr[], int left[], int lengthLeft, int right[], int lengthRight) 
  * Input:
  *      arr - an array value with datatype integer
  *      length - an integer value
+ * Output:
+ *      none
 */
 
 void sortArray(int arr[], int length){
@@ -77,6 +81,8 @@ void sortArray(int arr[], int length){
  *      left   - an integer value
  *      right  - an integer value
  *      target - an integer value
+ * Output:
+ *      none
 */
 
 int binarySearch(int arr[], int left, int right, int target) {
@@ -100,6 +106,8 @@ int binarySearch(int arr[], int left, int right, int target) {
  * Input:
  *      arr    - an array with datatype integer
  *      length   - an integer value
+ * Output:
+ *      none
 */
 
 void printData(int arr[], int length) {

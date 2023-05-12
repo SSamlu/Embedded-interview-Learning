@@ -1,10 +1,19 @@
+/**
+ * File: Date.c
+ * Author: Dien Nguyen
+ * Date: 09/05/2023
+ * Description: nhập ngày, tháng, năm và in ra đó là thứ mấy
+*/
+
 #include <stdint.h>
 #include <stdio.h>
 
+typedef enum {"Chu nhat", "Thu hai", "Thu ba", "Thu tu", "Thu nam", "Thu sau", "Thu bay"} dayOfWeekName;
+
 typedef struct {
   int year;
-  int month;
-  int day;
+  int month; // ở đây có thể dùng uint8_t
+  int day; // ở đây có thể dùng uint8_t
 } DateTime;
 /**
  *1. co ngay thang nam làm gốc (không thay đổi => const)
@@ -12,6 +21,15 @@ typedef struct {
  *3. lấy này nhập - có ngày gốc rồi "%7" (chia lấy dư)
  *4. 
 */
+
+/**
+ * Function: DayOfMonth
+ * Description: Print the number of days of the month includes leap and not leap year
+ * Input: 
+ *      month - an integer value
+ *      year  - an integer value
+*/
+
 int DayOfMonth(int month, int year) {
   switch (month)
   {
@@ -23,6 +41,7 @@ int DayOfMonth(int month, int year) {
       return 31;
       break;
     case 2:
+      // kiểm tra xêm năm đó có nhuận hay không để trả về là 28 hay 29 ngày
       if(isLeapYear(year)) {
         return 29;
       } else {
@@ -35,6 +54,13 @@ int DayOfMonth(int month, int year) {
   }
 }
 
+/**
+ * Function: randomArrayGenerate
+ * Description: Create a array RaNdom with length random
+ * Input:
+ *      val - an Array value with datatype by user define
+*/
+
 int dayOfWeek(DateTime date) {
   int tmp = (14 - date.month) / 12;
   int y = date.year - tmp;
@@ -42,6 +68,13 @@ int dayOfWeek(DateTime date) {
   int day = (date.day + y + y/4 - y/100 + y/400 + (31*m)/12) % 7;
   return day;
 }
+
+/**
+ * Function: randomArrayGenerate
+ * Description: Create a array RaNdom with length random
+ * Input:
+ *      val - an Array value with datatype by user define
+*/
 
 int isLeapYear(int year) {
   if((year % 4 == 0 && year % 100 != 0)|| year % 400 == 0) {

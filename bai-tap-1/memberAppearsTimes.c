@@ -23,6 +23,8 @@ int count[MAX_VALUE] = {0};
  * Description: Create a array RaNdom with length random
  * Input:
  *      val - an Array value with datatype by user define
+ * Output:
+ *      none
 */
 
 void randomArrayGenerate(Array *val) {
@@ -44,6 +46,8 @@ void randomArrayGenerate(Array *val) {
  * Description: Check the appearance of numbers in the array
  * Input:
  *      val - an Array value with datatype by user define
+ * Output:
+ *      none
 */
 
 void MemberAppearsTimesCheck(Array *arr) {
@@ -56,6 +60,10 @@ void MemberAppearsTimesCheck(Array *arr) {
 /**
  * Function: PrintData
  * Description: print data
+ * Input:
+ *      val - an Array value with datatype by user define
+ * Output:
+ *      none 
 */
 
 void PrintData() {
