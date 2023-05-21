@@ -1,7 +1,24 @@
+/*
+* File: bt1.cpp
+* Author: NGUYEN DINH DIEN
+* Date: 20/5/2023
+* Description: Tạo một lớp điểm trong hệ tọa độ 2D và viết các phương thức để tính
+                khoảng cách giữa hai điểm, tính diện tích của tam giác được tạo bởi ba
+                điểm.
+*/
 #include <iostream>
 #include <stdio.h>
 #include <math.h>
 using namespace std;
+
+/**
+ * Function: Class ToaDo
+ * Description: Class biễu diễn dữ liệu và phương thức của đối tượng ToaDo
+ * Input:
+ *    None
+ * Output:
+ *    None
+*/
 
 class ToaDo {
   private:
@@ -12,16 +29,43 @@ class ToaDo {
     int8_t setToaDo(int8_t x, int8_t y);
     int8_t getToaDoX();
     int8_t getToaDoY();
-    ToaDo(int8_t x = 0,int8_t y = 0) {
+
+    /**
+     * Function: Constructor ToaDo
+     * Description: nhập thông tin khởi tạo các ToaDo
+     * Input:
+     *    x - int8_t
+     *    y - int8_t
+     * Output:
+     *    None
+    */
+    ToaDo(const int8_t x = 0, const int8_t y = 0) {
       ToaDoX = x;
       ToaDoY = y;
     }
     double distanceTwoPoints(ToaDo* a);
     double dienTichTamGiac(ToaDo* a, ToaDo* b);
 };
+/**
+ * Function: distanceTwoPoints
+ * Description: in ra kết quả tọa độ X
+ * Input:
+ *    None
+ * Output:
+ *    Result - int8_t
+*/
 int8_t ToaDo::getToaDoX() {
   return ToaDo::ToaDoX;
 }
+
+/**
+ * Function: distanceTwoPoints
+ * Description: in ra kết quả tọa độ Y
+ * Input:
+ *    None
+ * Output:
+ *    Result - int8_t
+*/
 int8_t ToaDo::getToaDoY() {
   return ToaDo::ToaDoY;
 }
@@ -41,9 +85,27 @@ int8_t ToaDo::getToaDoY() {
 //     double dienTichTamGiac();
 // };
 
+/**
+ * Function: distanceTwoPoints
+ * Description: in ra kết quả khoảng cách giwuax hai điểm cho trước
+ * Input:
+ *    a - Object ToaDo
+ * Output:
+ *    Result - double
+*/
 double ToaDo::distanceTwoPoints(ToaDo* a) {
   return sqrt(pow(a->ToaDoX - ToaDo::ToaDoX, 2) + pow(a->ToaDoY - ToaDo::ToaDoY, 2));
 }
+
+/**
+ * Function: dienTichTamGiac
+ * Description: in ra kết quả diện tích tam giac với điểm cho trước
+ * Input:
+ *    a - Object ToaDo
+ *    b - Object ToaDo
+ * Output:
+ *    Result - double
+*/
 double ToaDo::dienTichTamGiac(ToaDo* a, ToaDo* b) {
   double x = ToaDo::distanceTwoPoints(a);
   double y = ToaDo::distanceTwoPoints(b);
