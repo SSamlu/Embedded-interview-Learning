@@ -1,0 +1,337 @@
+/*
+* File: main.cpp
+* Author: NGUYEN DINH DIEN
+* Date: 24/05/2023
+* Description: This is file for student management
+*/
+
+#include <iostream>
+#include <string>
+#include <stdio.h>
+#include <vector>
+
+using namespace std;
+typedef enum {
+  NAME,
+  NU
+} GIOITINH;
+
+typedef enum {
+  GIOI,
+  KHA,
+  TRUNG_BINH,
+  YEU
+} HOCLUC;
+
+class Student {
+  private:
+    uint8_t ID;
+    string name;
+    uint8_t age;
+    GIOITINH gioiTinh;
+    float DIEM_TOAN;
+    float DIEM_LY;
+    float DIEM_HOA;
+    float DIEM_TB;
+  public:
+    Student();
+    uint8_t getID();
+    void setName(string name);
+    string getName();
+    void setGioiTinh(GIOITINH gioiTinh);
+    GIOITINH getGioiTinh();
+    void setAge(uint8_t age);
+    uint8_t getAge();
+    void setDiemToan(float toan);
+    float getDiemToan();
+    void setDiemLy(float ly);
+    float getDiemLy();
+    void setDiemHoa(float Hoa);
+    float getDiemHoa();
+    float getDiemTrungBinh();
+    HOCLUC getHocLuc();
+}
+
+Student::Student(){
+  static uint8_t id = 100;
+  Student::ID = id;
+  id++;
+}
+
+uint8_t Student::getID(){
+  return this->ID;
+}
+
+/*
+* Class: Student
+* Function: setName
+* Description: This function use for set name of a Student
+* Input:
+*   name - name of Student
+* Output:
+*   return: None
+*/
+void setName(string name) {
+  this->name = name;
+};
+
+/*
+* Class: Student
+* Function: getName
+* Description: This function use for get name of student
+* Input:
+*   Dont have input parameters
+* Output:
+*   return: Name of Student
+*/
+string getName() {
+  return name;
+};
+
+/*
+* Class: Student
+* Function: setGioiTinh
+* Description: This function use for set sex of a Student
+* Input:
+*   gioiTinh - sex of Student
+* Output:
+*   return: None
+*/
+void setGioiTinh(GIOITINH gioiTinh) {
+  this->gioiTinh = gioiTinh;
+};
+
+/*
+* Class: Student
+* Function: getGioiTinh
+* Description: This function use for get sex of student
+* Input:
+*   Dont have input parameters
+* Output:
+*   return: Sex of Student
+*/
+GIOITINH getGioiTinh() {
+  return gioiTinh;
+};
+
+/*
+* Class: Student
+* Function: setAge
+* Description: This function use for set age of a Student
+* Input:
+*   age - age of Student
+* Output:
+*   return: None
+*/
+void Student::setAge(uint8_t age){
+    this->age = age;
+}
+
+/*
+* Class: Student
+* Function: getAge
+* Description: This function use for get sex of student
+* Input:
+*   Dont have input parameters
+* Output:
+*   return: Age of Student
+*/
+uint8_t getAge() {
+  return age;
+};
+
+/*
+* Class: Student
+* Function: setDiemToan
+* Description: This function use for set mark of Math
+* Input:
+*   toan - mark of Math
+* Output:
+*   return: None
+*/
+void setDiemToan(float toan) {
+  this->DIEM_TOAN = toan;
+};
+
+
+float getDiemToan() {
+  return Diem_TOAN;
+};
+
+/*
+* Class: Student
+* Function: setDiemLy
+* Description: This function use for set mark of Math
+* Input:
+*   ly - mark of Math
+* Output:
+*   return: None
+*/
+void setDiemLy(float ly) {
+  this->DIEM_LY = ly;
+};
+float getDiemLy() {
+  return DIEM_LY;
+};
+
+/*
+* Class: Student
+* Function: setDiemHoa
+* Description: This function use for set mark of Math
+* Input:
+*   Hoa - mark of Math
+* Output:
+*   return: None
+*/
+void setDiemHoa(float Hoa) {
+  this->DIEM_HOA = Hoa;
+};
+float getDiemHoa() {
+  return DIEM_HOA;
+};
+
+float Student::getDiemTrungBinh(){
+  if(Student::DIEM_TOAN < 0 || Student::DIEM_TOAN > 10) {
+    printf("ERROR! CHUA NHAP DIEM TOAN");
+    return -1;
+  }
+  if(Student::DIEM_LY < 0 || Student::DIEM_LY > 10) {
+    printf("ERROR! CHUA NHAP DIEM LY");
+    return -1;
+  }
+  if(Student::DIEM_HOA < 0 || Student::DIEM_HOA > 10) {
+    printf("ERROR! CHUA NHAP DIEM HOA");
+    return -1;
+  }
+  Student::DIEM_TB = (Student::DIEM_HOA + Student::DIEM_LY + Student::DIEM_TOAN) / 3;
+  return Student::DIEM_TB;
+}
+
+HOCLUC Student::getHocLuc() {
+  float DiemTB = Student::getDiemTrungBinh();
+  if(DiemTB >= 8) {
+    return GIOI;
+  } else if(DiemTB >= 6.5) {
+    return KHA;
+  } else if(DiemTB >= 5.5) {
+    return TRUNG_BINH;
+  } else {
+    return YEU;
+  }
+}
+
+class Menu {
+  private:
+    vector<Student> Database;
+  public:
+    void addStudent();
+    void updateStudentByID();
+    void removeStudent();
+    void searchStudentByName();
+    void sortListStudentByGPA();
+    void sortListStudentByName();
+    void showListStudent();
+    void showList();
+}
+
+void Menu:: addStudent(){
+  Student sv;
+  printf("Thong tin Sinh vien:\n");
+  string ten;
+  string s_gioiTinh;
+  uint8_t age;
+  float diem;
+  cout << "Nhap ten: ";
+  cin >> ten;
+  sv.setName(string ten);
+  cout << "Gioi tinh(Nam/Nu)";
+  cin >> s_gioiTinh;
+  sv.setGioiTinh(s_gioiTinh);
+  cout << "So tuoi: ";
+  cin >> age;
+  sv.setAge(age);
+  cout << "Nhap Diem Toan: ";
+  cin >> diem;
+  sv.setDiemToan(diem);
+  cout << "Nhap Diem Ly: ";
+  cin >> diem;
+  sv.setDiemLy(diem);
+  cout << "Nhap Diem Hoa: ";
+  cin >> diem;
+  sv.setDiemHoa(diem);
+  Database.push_back(sv);
+}
+
+/*
+* Class: Menu
+* Function: showListStudent
+* Description: This function use for adding student
+* Input:
+*   Dont have input parameters
+* Output:
+*   return: none
+*/
+void Menu::showListStudent(){
+  printf("\nID\t TEN\t\t GIOITINH\t TUOI\t TOAN\t LY\t HOA\t GPA\t HOCLUC\n");
+  for(item : Menu::Database){
+    cout << "ID: "<< item.getID();
+    cout << "name: "<< item.getName();
+    cout << "age: "<< item.getAge();
+    cout << "sex: "<< item.getGioiTinh();
+    cout << "Toan: "<< item.getDiemToan();
+    cout << "Ly: "<< item.getDiemLy();
+    cout << "Hoa: "<< item.getDiemHoa();
+    cout << "Diem TB: "<< item.getDiemTrungBinh();
+    count << "Hoc Luc: "<< item.getHocLuc();
+  }
+  printf("\n");
+}
+
+Menu::Menu(){
+  uint8_t phim = 0;
+
+  do
+  {
+    printf("------CHUONG TRINH QUAN LY SINH VIEN------\n");
+    printf("1. Them Sinh Vien\n");
+    printf("2. Cap nhat Thong Tin Sinh Vien\n");
+    printf("3. Xoa Sinh Vien boi ID\n");
+    printf("4. Tim kiem Thong Tin theo Ten \n");
+    printf("5. Sap Xep Sinh Vien theo GPA\n");
+    printf("6. Sap Xep Sinh Vien theo Ten\n");
+    printf("7. Hien thi Danh Sach Sinh Vien\n");
+    printf("8. Thoat\n");
+    printf("-------------------------------------------\n");
+    cin >> phim
+
+    switch (key)
+    {
+    case 1:
+      addStudent();
+      break;
+    case 2:
+      break;
+    case 3:
+      break;
+    case 4:
+      break;
+    case 5:
+      break;
+    case 6:
+      break;
+    case 7:
+      showList();
+      break;
+    case 8:
+      exit(0);
+      break;
+    default:
+      break;
+    }
+  } while (1);
+}
+int main() {
+  Menu *menu;
+  menu = new Menu();
+  return 0;
+}
