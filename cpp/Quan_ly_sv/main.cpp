@@ -11,6 +11,7 @@
 #include <vector>
 
 using namespace std;
+
 typedef enum {
   NAME,
   NU
@@ -23,6 +24,14 @@ typedef enum {
   YEU
 } HOCLUC;
 
+/*
+* Class: Student
+* Description: This is student class
+* Input:
+*   Dont have input parameters
+* Output:
+*   return: none
+*/
 class Student {
   private:
     uint8_t ID;
@@ -220,21 +229,38 @@ HOCLUC Student::getHocLuc() {
   }
 }
 
+/*
+* Class: Menu
+* Description: This is Menu class
+* Input:
+*   Dont have input parameters
+* Output:
+*   return: none
+*/
 class Menu {
   private:
     vector<Student> Database;
   public:
     void addStudent();
-    void updateStudentByID();
-    void removeStudent();
-    void searchStudentByName();
+    void updateStudentByID(uint8_t id);
+    void removeStudent(uint8_t id);
+    void searchStudentByName(string name);
     void sortListStudentByGPA();
     void sortListStudentByName();
     void showListStudent();
-    void showList();
+    // void showList();
 }
 
-void Menu:: addStudent(){
+/*
+* Class: Menu
+* Function: addStudent
+* Description: This function use for adding student
+* Input:
+*   Dont have input parameters
+* Output:
+*   return: none
+*/
+void Menu::addStudent(){
   Student sv;
   printf("Thong tin Sinh vien:\n");
   string ten;
@@ -264,6 +290,44 @@ void Menu:: addStudent(){
 
 /*
 * Class: Menu
+* Function: updateStudentByID
+* Description: This function use for update student by ID
+* Input:
+*   id - id of student
+* Output:
+*   return: none
+*/
+void Menu::updateStudentByID(uint8_t id) {
+  uint8_t index = -1;
+  for (int i = 0; i < Database.size(); i++) {
+    if (Database[i].id == id) {
+      index = i;
+      break;
+    }
+  }
+  if (index != -1) {
+
+    cout << "Da xoa sinh vien co ID " << id << endl;
+  }
+  else {
+    cout << "Khong tim thay sinh vien co ID " << id << endl;
+  }
+}
+
+/*
+* Class: Menu
+* Function: searchStudentByName
+* Description: This function use for search student by name
+* Input:
+*   id - id of student
+* Output:
+*   return: none
+*/
+void searchStudentByName(string name) {
+
+}
+/*
+* Class: Menu
 * Function: showListStudent
 * Description: This function use for adding student
 * Input:
@@ -272,6 +336,11 @@ void Menu:: addStudent(){
 *   return: none
 */
 void Menu::showListStudent(){
+  if (Menu::Database.empty()) {
+    cout << "Danh sach sinh vien rong." << endl;
+    return;
+  }
+
   printf("\nID\t TEN\t\t GIOITINH\t TUOI\t TOAN\t LY\t HOA\t GPA\t HOCLUC\n");
   for(item : Menu::Database){
     cout << "ID: "<< item.getID();
@@ -287,6 +356,81 @@ void Menu::showListStudent(){
   printf("\n");
 }
 
+/*
+* Class: Menu
+* Function: removeStudent
+* Description: This function use for remove student
+* Input:
+*   id - id of students
+* Output:
+*   return: none
+*/
+void removeStudent(uint8_t id) {
+    uint8_t index = -1;
+    for (int i = 0; i < Database.size(); i++) {
+      if (Database[i].id == id) {
+        index = i;
+        break;
+      }
+    }
+
+    if (index != -1) {
+        Database.erase(Database.begin() + index);
+        cout << "Da xoa sinh vien co ID " << id << endl;
+    }
+    else {
+        cout << "Khong tim thay sinh vien co ID " << id << endl;
+    }
+}
+
+/*
+* Class: Menu
+* Function: sortListStudentByName
+* Description: This function use for sort list student by name
+* Input:
+*   Dont have input parameters
+* Output:
+*   return: none
+*/
+void sortListStudentByName() {
+  if (Database.empty()) {
+    cout << "Danh sach sinh vien rong." << endl;
+    return;
+  }
+
+  vector<Student> svList = Database;
+  for (int i = 0; i < Database.size() - 1; i++) {
+    for (int j = i + 1; j < Database.size(); j++) {
+      if (Database[i].name > Database[j].name) {
+        swap(Database[i], Database[j]);
+      }
+    }
+  }
+
+  cout << "Danh sach sinh vien sap xep theo ten:" << endl;
+  for (const auto& sv : svList) {
+      cout << "ID: " << sv.getID() << endl;
+      cout << "Ten: " << sv.getName() << endl;
+      cout << "Gioi tinh: " << sv.getGioiTinh << endl;
+      cout << "Tuoi: " << sv.getAge() << endl;
+      cout << "Diem Toan: " << sv.getDiemToan() << endl;
+      cout << "Diem Ly: " << sv.getDiemLy() << endl;
+      cout << "Diem Hoa: " << sv.getDiemHoa() << endl;
+      cout << "Diem Trung Binh: " << sv.getDiemTrungBinh() << endl;
+      cout << "Hoc Luc: " << sv.getHocLuc() << endl;
+      cout << "---------------------------------" << endl;
+  }
+}
+
+/*
+* Class: Menu
+* Function: sortListStudentByName
+* Description: This function use for constructor Menu
+* Input:
+*   Dont have input parameters
+* Output:
+*   return: none
+*/
 Menu::Menu(){
   uint8_t phim = 0;
 
@@ -310,17 +454,28 @@ Menu::Menu(){
       addStudent();
       break;
     case 2:
+      updateStudentByID();
       break;
     case 3:
+      uint8_t id;
+      cout << "Nhap ID sinh vien can cap nhat: ";
+      cin >> id;
+      removeStudent(id);
       break;
     case 4:
+      string name;
+      cout << "Nhap ten sinh vien can tim kiem: ";
+      cin >> name;
+      searchStudentByName(name);
       break;
     case 5:
+      sortListStudentByGPA();
       break;
     case 6:
+      sortListStudentByName();
       break;
     case 7:
-      showList();
+      showListStudent()
       break;
     case 8:
       exit(0);
