@@ -382,7 +382,7 @@ void Menu::sortListStudentByGPA() {
   vector<SinhVien> svList = danhSachSinhVien;
   for (int i = 0; i < Database.size() - 1; i++) {
     for (int j = i + 1; j < Database.size(); j++) {
-      if (Database[i].name > Database[j].name) {
+      if (Database[i].getDiemTrungBinh() > Database[j].getDiemTrungBinh()) {
         swap(Database[i], Database[j]);
       }
     }
@@ -475,7 +475,7 @@ void sortListStudentByName() {
   vector<Student> svList = Database;
   for (int i = 0; i < Database.size() - 1; i++) {
     for (int j = i + 1; j < Database.size(); j++) {
-      if (Database[i].name > Database[j].name) {
+      if (Database[i].getName() == Database[j].getName())> Database[j].name) {
         swap(Database[i], Database[j]);
       }
     }
