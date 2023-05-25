@@ -520,19 +520,20 @@ Menu::Menu(){
     printf("7. Hien thi Danh Sach Sinh Vien\n");
     printf("8. Thoat\n");
     printf("-------------------------------------------\n");
-    cin >> phim
-
+    cin >> phim;
+    uint8_t id;
     switch (key)
     {
     case 1:
       addStudent();
       break;
     case 2:
+      cout << "Nhap ID sinh vien can cap nhat: ";
+      cin >> id;
       updateStudentByID();
       break;
     case 3:
-      uint8_t id;
-      cout << "Nhap ID sinh vien can cap nhat: ";
+      cout << "Nhap ID sinh vien can remove: ";
       cin >> id;
       removeStudent(id);
       break;
