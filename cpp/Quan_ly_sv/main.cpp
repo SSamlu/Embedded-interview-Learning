@@ -61,12 +61,30 @@ class Student {
     HOCLUC getHocLuc();
 }
 
+/*
+* Class: Student
+* Function: setName
+* Description: This function use for constructor Student
+* Input:
+*   none
+* Output:
+*   return: None
+*/
 Student::Student(){
   static uint8_t id = 100;
   Student::ID = id;
   id++;
 }
 
+/*
+* Class: Student
+* Function: setName
+* Description: This function use for get ID of a Student
+* Input:
+*   none
+* Output:
+*   return: None
+*/
 uint8_t Student::getID(){
   return this->ID;
 }
@@ -195,9 +213,29 @@ float getDiemLy() {
 void setDiemHoa(float Hoa) {
   this->DIEM_HOA = Hoa;
 };
+
+/*
+* Class: Student
+* Function: getDiemHoa
+* Description: This function use for get DIEM_HOA of student
+* Input:
+*   Dont have input parameters
+* Output:
+*   return: Name of Student
+*/
 float getDiemHoa() {
   return DIEM_HOA;
 };
+
+/*
+* Class: Student
+* Function: getDiemTrungBinh
+* Description: This function use for get DIEN_TB of student
+* Input:
+*   Dont have input parameters
+* Output:
+*   return: Name of Student
+*/
 
 float Student::getDiemTrungBinh(){
   if(Student::DIEM_TOAN < 0 || Student::DIEM_TOAN > 10) {
@@ -216,6 +254,15 @@ float Student::getDiemTrungBinh(){
   return Student::DIEM_TB;
 }
 
+/*
+* Class: Student
+* Function: getHocLuc
+* Description: This function use for get HOCLUC of student
+* Input:
+*   Dont have input parameters
+* Output:
+*   return: Name of Student
+*/
 HOCLUC Student::getHocLuc() {
   float DiemTB = Student::getDiemTrungBinh();
   if(DiemTB >= 8) {
@@ -323,8 +370,35 @@ void Menu::updateStudentByID(uint8_t id) {
 * Output:
 *   return: none
 */
-void searchStudentByName(string name) {
+void Menu::searchStudentByName(string name) {
 
+}
+
+void Menu::sortListStudentByGPA() {
+  if (Database.empty()) {
+    cout << "Danh sach sinh vien rong." << endl;
+    return;
+  }
+  vector<SinhVien> svList = danhSachSinhVien;
+  for (int i = 0; i < Database.size() - 1; i++) {
+    for (int j = i + 1; j < Database.size(); j++) {
+      if (Database[i].name > Database[j].name) {
+        swap(Database[i], Database[j]);
+      }
+    }
+  }
+  printf("\nID\t TEN\t\t GIOITINH\t TUOI\t TOAN\t LY\t HOA\t GPA\t HOCLUC\n");
+  for(item : svList){
+    cout << "ID: "<< item.getID();
+    cout << "name: "<< item.getName();
+    cout << "age: "<< item.getAge();
+    cout << "sex: "<< item.getGioiTinh();
+    cout << "Toan: "<< item.getDiemToan();
+    cout << "Ly: "<< item.getDiemLy();
+    cout << "Hoa: "<< item.getDiemHoa();
+    cout << "Diem TB: "<< item.getDiemTrungBinh();
+    count << "Hoc Luc: "<< item.getHocLuc();
+  }
 }
 /*
 * Class: Menu
@@ -484,6 +558,21 @@ Menu::Menu(){
       break;
     }
   } while (1);
+}
+/*
+* Function: swap
+* Description: This function swap object student
+* Input:
+*   student1 - object
+*   student1 - object
+* Output:
+*   return: none
+*/
+void swap(Student *student1, Student *student2)
+{
+    Student student = *student1;
+    *student1 = *student2;
+    *student2 = student;
 }
 int main() {
   Menu *menu;
