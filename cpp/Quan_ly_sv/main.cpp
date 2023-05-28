@@ -329,7 +329,8 @@ class Menu {
   private:
     vector<Student> Database;
     uint8_t checkInput(void *value, Object object);
-
+    void swap(Student *student1, Student *student2);
+    int compareWords(char* word, char* key);
   public:
     Menu();
     void addStudent();
@@ -470,10 +471,10 @@ void Menu::sortListStudentByGPA() {
     return;
   }
   vector<Student> svList = Database;
-  for (int i = 0; i < Database.size() - 1; i++) {
-    for (int j = i + 1; j < Database.size(); j++) {
-      if (Database[i].getDiemTrungBinh() > Database[j].getDiemTrungBinh()) {
-        swap(Database[i], Database[j]);
+  for (int i = 0; i < svList.size() - 1; i++) {
+    for (int j = i + 1; j < svList.size(); j++) {
+      if (svList[i].getDiemTrungBinh() > svList[j].getDiemTrungBinh()) {
+        Menu::swap(&svList[i], &svList[j]);
       }
     }
   }
@@ -539,10 +540,10 @@ void Menu::sortListStudentByName() {
   }
 
   vector<Student> svList = Menu::Database;
-  for (int i = 0; i < Menu::Database.size() - 1; i++) {
-    for (int j = i + 1; j < Menu::Database.size(); j++) {
-      if (Database[i].getName() > Database[j].getName()) {
-        swap(Database[i], Database[j]);
+  for (int i = 0; i < svList.size() - 1; i++) {
+    for (int j = i + 1; j < svList.size(); j++) {
+      if (svList[i].getName() > svList[j].getName()) {
+        Menu::swap(&svList[i], &svList[j]);
       }
     }
   }
@@ -636,15 +637,14 @@ Menu::Menu(){
 * Output:
 *   return: none
 */
-void swap(Student *student1, Student *student2)
-{
+void Menu::swap(Student *student1, Student *student2) {
     Student student = *student1;
     *student1 = *student2;
     *student2 = student;
 }
 
 /*
-* Function: swap
+* Function: compareWords
 * Description: This function compare character in a string
 * Input:char
 *   word - char
@@ -652,11 +652,13 @@ void swap(Student *student1, Student *student2)
 * Output:
 *   return: int
 */
-int compareWords(char* word, char* key) {
+int Menu::compareWords(char* word, char* key) {
   uint8_t i = 0, j = 0;
   while (*(word + i) != '\0' && *(key + j) != '\0'){
     int wordAscii = (int)(*(word + i));
     int keyAscii = (int)(*(key + j));
+    cout << "word: " << *(word + i) << " int: " << wordAscii << endl;
+    cout << "key: " << *(key + i) << " int: " << keyAscii << endl;
     if (wordAscii > keyAscii){
       return 1;
     } else if (wordAscii < keyAscii) {
