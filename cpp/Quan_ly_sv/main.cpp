@@ -334,8 +334,8 @@ class Menu {
   public:
     Menu();
     void addStudent();
-    void updateStudentByID(uint8_t id);
-    void removeStudent(uint8_t id);
+    void updateStudentByID(int id);
+    void removeStudent(int id);
     void searchStudentByName();
     void sortListStudentByGPA();
     void sortListStudentByName();
@@ -399,7 +399,7 @@ void Menu::addStudent(){
     }
     INPUT_INPOMATION("Nhap Ten: ", ten, Menu::checkInput(&ten, TEN));
     sv.setName(ten);
-    INPUT_INPOMATION("Gioi tinh(NAM/NU)", s_gioiTinh, Menu::checkInput(&s_gioiTinh, GIOI_TINH));
+    INPUT_INPOMATION("Gioi tinh(NAM/NU): ", s_gioiTinh, Menu::checkInput(&s_gioiTinh, GIOI_TINH));
     sv.setGioiTinh(s_gioiTinh == "NAM" ? NAM : NU);
     INPUT_INPOMATION("So tuoi: ", age, Menu::checkInput(&age, TUOI));
     sv.setAge(age);
@@ -422,7 +422,7 @@ void Menu::addStudent(){
 * Output:
 *   return: none
 */
-void Menu::updateStudentByID(uint8_t id) {
+void Menu::updateStudentByID(int id) {
   uint8_t index = -1;
   for (int i = 0; i < Database.size(); i++) {
     if (Database[i].getID() == id) {
@@ -506,7 +506,7 @@ void Menu::showListStudent(){
 * Output:
 *   return: none
 */
-void Menu::removeStudent(uint8_t id) {
+void Menu::removeStudent(int id) {
     uint8_t index = -1;
     for (int i = 0; i < Menu::Database.size(); i++) {
       if (Menu::Database[i].getID() == id) {
@@ -593,7 +593,7 @@ Menu::Menu(){
     printf("Nhan '0' de thoat\n");
     printf("-------------------------------------------\n");
     cin >> phim;
-    uint8_t id;
+    int id;
     string mName;
     switch (phim)
     {
@@ -622,6 +622,8 @@ Menu::Menu(){
     case '7':
       showListStudent();
       break;
+    case '0':
+      exit(0);
     default:
       cout << "Lua chon khong hop le!\n";
       break;
