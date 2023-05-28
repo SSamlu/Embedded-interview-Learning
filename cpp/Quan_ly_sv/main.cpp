@@ -8,12 +8,36 @@
 #include <iostream>
 #include <string>
 #include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <cctype>
+#include <cstring>
+
 #include <vector>
 
 using namespace std;
 
+#define INPUT_INPOMATION(text, var, checkCondition) \
+  do {                                  \
+    cout << #text;                      \
+    cin >> var;                         \
+  } while(checkCondition == 0);              
+  
+#define CHECK_INFO(condition, text1, status) \
+  if(condition) {                           \
+    cout << #text1;                          \
+    status;                             \
+  }
+
+#define PRINT_INFO(item, Database)\
+    printf("\nID\t TEN\t\t GIOITINH\t TUOI\t TOAN\t LY\t HOA\t GPA\t HOCLUC\n");                                                  \
+    for (auto item : Database) {                                                                                                 \
+        printf("%d\t %s\t\t %s\t\t %d\t %.2lf\t %.2lf\t %.2lf\t %.2lf\t %d\n", item.getID(), item.getName().c_str(), item.getGioiTinh().c_str(),\
+        item.getAge(), item.getDiemToan(), item.getDiemLy(), item.getDiemHoa(), item.getDiemTrungBinh(), item.getHocLuc());   \
+    }                                                                                                                         \
+    printf("\n");
 typedef enum {
-  NAME,
+  NAM,
   NU
 } GIOITINH;
 
@@ -24,6 +48,12 @@ typedef enum {
   YEU
 } HOCLUC;
 
+typedef enum {
+  TEN,
+  TUOI,
+  GIOI_TINH,
+  DIEM
+} Object;
 /*
 * Class: Student
 * Description: This is student class
@@ -34,22 +64,23 @@ typedef enum {
 */
 class Student {
   private:
-    uint8_t ID;
+    int ID;
     string name;
-    uint8_t age;
+    int age;
     GIOITINH gioiTinh;
     float DIEM_TOAN;
     float DIEM_LY;
     float DIEM_HOA;
     float DIEM_TB;
+    // static int id;
   public:
     Student();
     uint8_t getID();
-    void setName(string name);
+    void setName(string sName);
     string getName();
-    void setGioiTinh(GIOITINH gioiTinh);
-    GIOITINH getGioiTinh();
-    void setAge(uint8_t age);
+    void setGioiTinh(GIOITINH GTgioiTinh);
+    string getGioiTinh();
+    void setAge(int uAge);
     uint8_t getAge();
     void setDiemToan(float toan);
     float getDiemToan();
@@ -59,7 +90,7 @@ class Student {
     float getDiemHoa();
     float getDiemTrungBinh();
     HOCLUC getHocLuc();
-}
+};
 
 /*
 * Class: Student
@@ -70,8 +101,9 @@ class Student {
 * Output:
 *   return: None
 */
+
 Student::Student(){
-  static uint8_t id = 100;
+  int id = 100;
   Student::ID = id;
   id++;
 }
@@ -98,8 +130,8 @@ uint8_t Student::getID(){
 * Output:
 *   return: None
 */
-void setName(string name) {
-  this->name = name;
+void Student::setName(string sName) {
+  this->name = sName;
 };
 
 /*
@@ -111,8 +143,8 @@ void setName(string name) {
 * Output:
 *   return: Name of Student
 */
-string getName() {
-  return name;
+string Student::getName() {
+  return Student::name;
 };
 
 /*
@@ -124,8 +156,8 @@ string getName() {
 * Output:
 *   return: None
 */
-void setGioiTinh(GIOITINH gioiTinh) {
-  this->gioiTinh = gioiTinh;
+void Student::setGioiTinh(GIOITINH GTgioiTinh) {
+  this->gioiTinh = GTgioiTinh;
 };
 
 /*
@@ -137,8 +169,9 @@ void setGioiTinh(GIOITINH gioiTinh) {
 * Output:
 *   return: Sex of Student
 */
-GIOITINH getGioiTinh() {
-  return gioiTinh;
+string Student::getGioiTinh() {
+  string tmp = Student::gioiTinh == NAM ? "NAM" : "NU"; 
+  return tmp;
 };
 
 /*
@@ -146,12 +179,12 @@ GIOITINH getGioiTinh() {
 * Function: setAge
 * Description: This function use for set age of a Student
 * Input:
-*   age - age of Student
+*   uAge - age of Student
 * Output:
 *   return: None
 */
-void Student::setAge(uint8_t age){
-    this->age = age;
+void Student::setAge(int uAge){
+    this->age = uAge;
 }
 
 /*
@@ -163,8 +196,8 @@ void Student::setAge(uint8_t age){
 * Output:
 *   return: Age of Student
 */
-uint8_t getAge() {
-  return age;
+uint8_t Student::getAge() {
+  return Student::age;
 };
 
 /*
@@ -176,13 +209,21 @@ uint8_t getAge() {
 * Output:
 *   return: None
 */
-void setDiemToan(float toan) {
+void Student::setDiemToan(float toan) {
   this->DIEM_TOAN = toan;
 };
 
-
-float getDiemToan() {
-  return Diem_TOAN;
+/*
+* Class: Student
+* Function: getDiemToan
+* Description: This function use for get math mark of student
+* Input:
+*   Dont have input parameters
+* Output:
+*   return: DIEM_TOAN of Student
+*/
+float Student::getDiemToan() {
+  return Student::DIEM_TOAN;
 };
 
 /*
@@ -194,11 +235,11 @@ float getDiemToan() {
 * Output:
 *   return: None
 */
-void setDiemLy(float ly) {
+void Student::setDiemLy(float ly) {
   this->DIEM_LY = ly;
 };
-float getDiemLy() {
-  return DIEM_LY;
+float Student::getDiemLy() {
+  return Student::DIEM_LY;
 };
 
 /*
@@ -210,7 +251,7 @@ float getDiemLy() {
 * Output:
 *   return: None
 */
-void setDiemHoa(float Hoa) {
+void Student::setDiemHoa(float Hoa) {
   this->DIEM_HOA = Hoa;
 };
 
@@ -223,8 +264,8 @@ void setDiemHoa(float Hoa) {
 * Output:
 *   return: Name of Student
 */
-float getDiemHoa() {
-  return DIEM_HOA;
+float Student::getDiemHoa() {
+  return Student::DIEM_HOA;
 };
 
 /*
@@ -234,7 +275,7 @@ float getDiemHoa() {
 * Input:
 *   Dont have input parameters
 * Output:
-*   return: Name of Student
+*   return: DIEM_TB of Student
 */
 
 float Student::getDiemTrungBinh(){
@@ -287,16 +328,48 @@ HOCLUC Student::getHocLuc() {
 class Menu {
   private:
     vector<Student> Database;
+    uint8_t checkInput(void *value, Object object);
+
   public:
+    Menu();
     void addStudent();
     void updateStudentByID(uint8_t id);
     void removeStudent(uint8_t id);
-    void searchStudentByName(string name);
+    void searchStudentByName();
     void sortListStudentByGPA();
     void sortListStudentByName();
     void showListStudent();
+    int checkExit(char* str);
     // void showList();
-}
+};
+
+uint8_t Menu::checkInput(void *value, Object object) {
+  uint8_t status = 1;
+  switch (object)
+  {
+  case TEN:
+    /* code */
+    // CHECK_INFO(*(string*) value == '', "ERROR: Ten khong hop le, vui long nhap lai", status = 0);
+    // if (*(string*) value == '') {
+    //   cout << "ERROR: Ten khong hop le, vui long nhap lai";
+    //   status = 0;
+    // }
+    break;
+  case TUOI:
+    CHECK_INFO(*(int*) value < 7 || *(int*) value > 24, "ERROR: Tuoi khong hop le, vui long nhap lai\n", status = 0);
+    break;
+  case GIOI_TINH:
+    CHECK_INFO(*(string*) value != "NAM" && *(string*) value != "NU", "ERROR: Gioi Tinh khong hop le, vui long nhap lai\n", status = 0);
+    break;
+  case DIEM:
+    CHECK_INFO(*(float *) value < 0 || *(float *) value > 10, "Error: Diem khong hop le, vui long nhap lai\n", status = 0);
+    break;
+  default:
+    status = 0;
+    break;
+  }
+  return status;
+};
 
 /*
 * Class: Menu
@@ -312,27 +385,31 @@ void Menu::addStudent(){
   printf("Thong tin Sinh vien:\n");
   string ten;
   string s_gioiTinh;
-  uint8_t age;
-  float diem;
-  cout << "Nhap ten: ";
-  cin >> ten;
-  sv.setName(string ten);
-  cout << "Gioi tinh(Nam/Nu)";
-  cin >> s_gioiTinh;
-  sv.setGioiTinh(s_gioiTinh);
-  cout << "So tuoi: ";
-  cin >> age;
-  sv.setAge(age);
-  cout << "Nhap Diem Toan: ";
-  cin >> diem;
-  sv.setDiemToan(diem);
-  cout << "Nhap Diem Ly: ";
-  cin >> diem;
-  sv.setDiemLy(diem);
-  cout << "Nhap Diem Hoa: ";
-  cin >> diem;
-  sv.setDiemHoa(diem);
-  Database.push_back(sv);
+  int age;
+  float diemToan;
+  float diemLy;
+  float diemHoa;
+  string exit;
+  while(1) {
+    if(Menu::Database.size() > 0) {
+      cout << "Ban co muon tiep tuc khong: \n 'exit' de thoat \n '1' de tiep tuc" << endl;
+      cin >> exit;
+      if(exit == "exit") return;
+    }
+    INPUT_INPOMATION("Nhap Ten: ", ten, Menu::checkInput(&ten, TEN));
+    sv.setName(ten);
+    INPUT_INPOMATION("Gioi tinh(NAM/NU)", s_gioiTinh, Menu::checkInput(&s_gioiTinh, GIOI_TINH));
+    sv.setGioiTinh(s_gioiTinh == "NAM" ? NAM : NU);
+    INPUT_INPOMATION("So tuoi: ", age, Menu::checkInput(&age, TUOI));
+    sv.setAge(age);
+    INPUT_INPOMATION("Nhap Diem Toan: ", diemToan, Menu::checkInput(&diemToan, DIEM));
+    sv.setDiemToan(diemToan);
+    INPUT_INPOMATION("Nhap Diem Ly: ", diemLy, Menu::checkInput(&diemLy, DIEM));
+    sv.setDiemLy(diemLy);
+    INPUT_INPOMATION("Nhap Diem Hoa: ", diemHoa, Menu::checkInput(&diemHoa, DIEM));
+    sv.setDiemHoa(diemHoa);
+    Database.push_back(sv);
+  }
 }
 
 /*
@@ -347,7 +424,7 @@ void Menu::addStudent(){
 void Menu::updateStudentByID(uint8_t id) {
   uint8_t index = -1;
   for (int i = 0; i < Database.size(); i++) {
-    if (Database[i].id == id) {
+    if (Database[i].getID() == id) {
       index = i;
       break;
     }
@@ -370,8 +447,21 @@ void Menu::updateStudentByID(uint8_t id) {
 * Output:
 *   return: none
 */
-void Menu::searchStudentByName(string name) {
-
+void Menu::searchStudentByName() {
+  string mName;
+  if (Menu::Database.empty()) {
+    cout << "Danh sach sinh vien rong." << endl;
+    return;
+  }
+  INPUT_INPOMATION("Nhap ten sinh vien can tim kiem: ", mName, 1);
+  for(auto item : Menu::Database) {
+    if(strcmp(item.getName().c_str(), mName.c_str()) == 0) {
+       printf("ID\t TEN\t\t GIOITINH\t TUOI\t TOAN\t LY\t HOA\t GPA\t HOCLUC\n");
+      printf("%d\t %s\t\t %s\t\t %d\t %.2lf\t %.2lf\t %.2lf\t %.2lf\t %d\n", item.getID(), item.getName().c_str(), item.getGioiTinh().c_str(),\
+        item.getAge(), item.getDiemToan(), item.getDiemLy(), item.getDiemHoa(), item.getDiemTrungBinh(), item.getHocLuc());
+      printf("\n");
+    }
+  }
 }
 
 void Menu::sortListStudentByGPA() {
@@ -379,7 +469,7 @@ void Menu::sortListStudentByGPA() {
     cout << "Danh sach sinh vien rong." << endl;
     return;
   }
-  vector<SinhVien> svList = danhSachSinhVien;
+  vector<Student> svList = Database;
   for (int i = 0; i < Database.size() - 1; i++) {
     for (int j = i + 1; j < Database.size(); j++) {
       if (Database[i].getDiemTrungBinh() > Database[j].getDiemTrungBinh()) {
@@ -387,19 +477,8 @@ void Menu::sortListStudentByGPA() {
       }
     }
   }
-  printf("\nID\t TEN\t\t GIOITINH\t TUOI\t TOAN\t LY\t HOA\t GPA\t HOCLUC\n");
-  for(item : svList){
-    cout << "ID: "<< item.getID();
-    cout << "name: "<< item.getName();
-    cout << "age: "<< item.getAge();
-    cout << "sex: "<< item.getGioiTinh();
-    cout << "Toan: "<< item.getDiemToan();
-    cout << "Ly: "<< item.getDiemLy();
-    cout << "Hoa: "<< item.getDiemHoa();
-    cout << "Diem TB: "<< item.getDiemTrungBinh();
-    count << "Hoc Luc: "<< item.getHocLuc();
-  }
-}
+  PRINT_INFO(item, svList);
+};
 /*
 * Class: Menu
 * Function: showListStudent
@@ -414,20 +493,7 @@ void Menu::showListStudent(){
     cout << "Danh sach sinh vien rong." << endl;
     return;
   }
-
-  printf("\nID\t TEN\t\t GIOITINH\t TUOI\t TOAN\t LY\t HOA\t GPA\t HOCLUC\n");
-  for(item : Menu::Database){
-    cout << "ID: "<< item.getID();
-    cout << "name: "<< item.getName();
-    cout << "age: "<< item.getAge();
-    cout << "sex: "<< item.getGioiTinh();
-    cout << "Toan: "<< item.getDiemToan();
-    cout << "Ly: "<< item.getDiemLy();
-    cout << "Hoa: "<< item.getDiemHoa();
-    cout << "Diem TB: "<< item.getDiemTrungBinh();
-    count << "Hoc Luc: "<< item.getHocLuc();
-  }
-  printf("\n");
+  PRINT_INFO(item, Menu::Database);
 }
 
 /*
@@ -439,17 +505,17 @@ void Menu::showListStudent(){
 * Output:
 *   return: none
 */
-void removeStudent(uint8_t id) {
+void Menu::removeStudent(uint8_t id) {
     uint8_t index = -1;
-    for (int i = 0; i < Database.size(); i++) {
-      if (Database[i].id == id) {
+    for (int i = 0; i < Menu::Database.size(); i++) {
+      if (Menu::Database[i].getID() == id) {
         index = i;
         break;
       }
     }
 
     if (index != -1) {
-        Database.erase(Database.begin() + index);
+        Menu::Database.erase(Menu::Database.begin() + index);
         cout << "Da xoa sinh vien co ID " << id << endl;
     }
     else {
@@ -466,35 +532,40 @@ void removeStudent(uint8_t id) {
 * Output:
 *   return: none
 */
-void sortListStudentByName() {
-  if (Database.empty()) {
+void Menu::sortListStudentByName() {
+  if (Menu::Database.empty()) {
     cout << "Danh sach sinh vien rong." << endl;
     return;
   }
 
-  vector<Student> svList = Database;
-  for (int i = 0; i < Database.size() - 1; i++) {
-    for (int j = i + 1; j < Database.size(); j++) {
-      if (Database[i].getName() == Database[j].getName())> Database[j].name) {
+  vector<Student> svList = Menu::Database;
+  for (int i = 0; i < Menu::Database.size() - 1; i++) {
+    for (int j = i + 1; j < Menu::Database.size(); j++) {
+      if (Database[i].getName() > Database[j].getName()) {
         swap(Database[i], Database[j]);
       }
     }
   }
-
   cout << "Danh sach sinh vien sap xep theo ten:" << endl;
-  for (const auto& sv : svList) {
-      cout << "ID: " << sv.getID() << endl;
-      cout << "Ten: " << sv.getName() << endl;
-      cout << "Gioi tinh: " << sv.getGioiTinh << endl;
-      cout << "Tuoi: " << sv.getAge() << endl;
-      cout << "Diem Toan: " << sv.getDiemToan() << endl;
-      cout << "Diem Ly: " << sv.getDiemLy() << endl;
-      cout << "Diem Hoa: " << sv.getDiemHoa() << endl;
-      cout << "Diem Trung Binh: " << sv.getDiemTrungBinh() << endl;
-      cout << "Hoc Luc: " << sv.getHocLuc() << endl;
-      cout << "---------------------------------" << endl;
-  }
+  PRINT_INFO(sv, svList);
+  // for (auto sv : svList) {
+  //     cout << "ID: " << sv.getID() << endl;
+  //     cout << "Ten: " << sv.getName() << endl;
+  //     cout << "Gioi tinh: " << sv.getGioiTinh() << endl;
+  //     cout << "Tuoi: " << sv.getAge() << endl;
+  //     cout << "Diem Toan: " << sv.getDiemToan() << endl;
+  //     cout << "Diem Ly: " << sv.getDiemLy() << endl;
+  //     cout << "Diem Hoa: " << sv.getDiemHoa() << endl;
+  //     cout << "Diem Trung Binh: " << sv.getDiemTrungBinh() << endl;
+  //     cout << "Hoc Luc: " << sv.getHocLuc() << endl;
+  //     cout << "---------------------------------" << endl;
+  // }
 }
+
+// int checkExit(string str) {
+//   if(strcmp(str.c_str(), "EXIT") == 0) return 1;
+//   return 0;
+// };
 
 /*
 * Class: Menu
@@ -518,44 +589,40 @@ Menu::Menu(){
     printf("5. Sap Xep Sinh Vien theo GPA\n");
     printf("6. Sap Xep Sinh Vien theo Ten\n");
     printf("7. Hien thi Danh Sach Sinh Vien\n");
-    printf("8. Thoat\n");
+    printf("Nhan '0' de thoat\n");
     printf("-------------------------------------------\n");
     cin >> phim;
     uint8_t id;
-    switch (key)
+    string mName;
+    switch (phim)
     {
-    case 1:
+    case '1':
       addStudent();
       break;
-    case 2:
+    case '2':
       cout << "Nhap ID sinh vien can cap nhat: ";
       cin >> id;
-      updateStudentByID();
+      updateStudentByID(id);
       break;
-    case 3:
+    case '3':
       cout << "Nhap ID sinh vien can remove: ";
       cin >> id;
       removeStudent(id);
       break;
-    case 4:
-      string name;
-      cout << "Nhap ten sinh vien can tim kiem: ";
-      cin >> name;
-      searchStudentByName(name);
+    case '4':
+      searchStudentByName();
       break;
-    case 5:
+    case '5':
       sortListStudentByGPA();
       break;
-    case 6:
+    case '6':
       sortListStudentByName();
       break;
-    case 7:
-      showListStudent()
-      break;
-    case 8:
-      exit(0);
+    case '7':
+      showListStudent();
       break;
     default:
+      cout << "Lua chon khong hop le!\n";
       break;
     }
   } while (1);
@@ -575,6 +642,31 @@ void swap(Student *student1, Student *student2)
     *student1 = *student2;
     *student2 = student;
 }
+
+/*
+* Function: swap
+* Description: This function compare character in a string
+* Input:char
+*   word - char
+*   key - char
+* Output:
+*   return: int
+*/
+int compareWords(char* word, char* key) {
+  uint8_t i = 0, j = 0;
+  while (*(word + i) != '\0' && *(key + j) != '\0'){
+    int wordAscii = (int)(*(word + i));
+    int keyAscii = (int)(*(key + j));
+    if (wordAscii > keyAscii){
+      return 1;
+    } else if (wordAscii < keyAscii) {
+      return 0;
+    }
+    i++; j++;
+  }
+  return 0;
+}
+
 int main() {
   Menu *menu;
   menu = new Menu();
