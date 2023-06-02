@@ -111,6 +111,6 @@ int main() {
     printf("Toi Da tra duoc sach\n");
   }
   book->infoBookPrint();
-  delete Book;
+  delete book;
   return 0;
 }
