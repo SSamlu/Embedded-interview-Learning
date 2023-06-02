@@ -7,7 +7,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
-#include <stdbool.h>
+// #include <stdbool.h>
 
 #define MAX_WORD 100
 #define MAX_LENGTH 50
@@ -78,19 +78,19 @@ void SplitString(char *input, word *words) {
  * Output:
 *        none
 */
-bool compareWords(char* word, char* key) {
+int compareWords(char* word, char* key) {
   uint8_t i = 0, j = 0;
   while (*(word + i) != '\0' && *(key + j) != '\0'){
     int wordAscii = (int)(*(word + i));
     int keyAscii = (int)(*(key + j));
     if (wordAscii > keyAscii){
-      return true;
+      return 1;
     } else if (wordAscii < keyAscii) {
-      return false;
+      return 0;
     }
     i++; j++;
   }
-  return false;
+  return 0;
 }
 
 /**
@@ -113,7 +113,7 @@ void SortWords(word *words) {
       words->word[j+1] = words->word[j];
       j--;
     }
-    words->word[j + 1] = key; // gắn đại chỉ key vào word ở index 0
+    words->word[j + 1] = key; // gắn địa chỉ key vào word ở index j + 1
   }
 };
 
