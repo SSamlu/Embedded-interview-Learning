@@ -335,7 +335,7 @@ void Manager::getDish() {
   if(listDish.empty()) {
     printf("Danh sach Thuc Uong trong");
   } else {
-    int noOrder = 1
+    int noOrder = 1;
     PRINT_INFO(item, Manager::listDish, noOrder);
   }
 }
