@@ -158,6 +158,7 @@ class Table {
 *   return: None
 */
 Table::Table() {
+
 }
 
 /*
@@ -169,7 +170,6 @@ Table::Table() {
 *   return: None
 */
 void Table::setTableID(const int id) {
-
   this->tableID = id;
 };
 
@@ -194,7 +194,21 @@ void Table::setStatus (statusTable status) {
 *   return: None
 */
 void Table::setListDish(vector<Dish> listDish) {
-  this->listDish = listDish;
+  typedef enum {
+    CLEAR_DISH,
+    ORDER_DISH
+  } status;
+
+  switch (status) {
+    case CLEAR_DISH:
+      this->listDish.clear();
+      break;
+    case ORDER_DISH:
+      this->listDish.push_back(listDish);
+      break;
+    default:
+      break;
+  }
 }
 
 /*
@@ -221,53 +235,307 @@ vector<Dish> Table::getListDish() {
 class Manager {
   private:
     int idDish;
+    int numberTables;
     vector<Dish> listDish;
     vector<Table> listTable;
   public:
-
+    void setNumberTables(int quantityTables);
     void addDish();
     void updateDish();
     void removeDish();
     void getDish();
+    int getNumberTables();
     vector<Table> getListTable();
     vector<Dish> getListDish();
 };
 
+/*
+* Function: setName
+* Description: This function use for set number amount of Table
+* Input:
+*   name - string
+* Output:
+*   return: None
+*/
+void Manager::setNumberTables(int quantityTables) {
+  // INPUT_INPOMATION("NHAP SO LUONG BAN: ", id_Dish, id_Dish < 0);
+  Manager::numberTables = quantityTables
+};
+
+/*
+* Function: addDish
+* Description: This function use for add dish
+* Input:
+*   None
+* Output:
+*   return: None
+*/
 void Manager::addDish() {
-  
+  string name_dish;
+  int price_dish;
+  INPUT_INPOMATION("NHAP TEN MON: ", name_dish, 0);
+  INPUT_INPOMATION("NHAP GIA: ", price_dish, price_dish < 0);
+
+  Dish dish(name_dish, price_dish);
+
+  Manager::listDish.push_back(dish);
 }
 
+/*
+* Function: updateDish
+* Description: This function use for update Dish
+* Input:
+*   None
+* Output:
+*   return: None
+*/
 void Manager::updateDish() {
+  string name_dish;
+  int price_dish;
+  int id_dish;
+  vector<Dish> *tmpDish = &listDish;
+  int haveDish = -1;
+  if(listDish.empty()) {
+    printf("Danh sach Thuc Uong trong");
+  } else {
+    printf("STT\t| ID\t| Ten\t| Price\n");
+    PRINT_INFO(item, listDish);
+    // for (Dish item : listDish) {
+      
+    // }
+    INPUT_INPOMATION("NHAP ID MON: ", id_dish, 0);
+    for(int i = 0; i < tmpDish->size(); i++) {
+      if((tmp->at(i)).GetID() == id_dish) {
+        INPUT_INPOMATION("NHAP TEN MON: ", name_dish, 0);
+        INPUT_INPOMATION("NHAP GIA: ", price_dish, price_dish < 0);
+        tmpDish->at(i).SetName(name_dish);
+        tmpDish->at(i).SetPrice(price_dish);
+        haveDish = 1;
+        break;
+      }
+    }
 
+    if(haveDish == -1) {
+      printf("KHONG TIM THAY MON AN CAN SUA\n");
+    }
+  
+  }
 }
 
+/*
+* Function: updateDish
+* Description: This function use for update Dish
+* Input:
+*   None
+* Output:
+*   return: None
+*/
 void Manager::removeDish() {
-
+  // string name_dish;
+  // int price_dish;
+  int id_dish;
+  vector<Dish> *tmpDish = &listDish;
+  int haveDish = -1;
+  if(tmpDish->empty()) {
+    printf("Danh sach Thuc Uong trong");
+  } else {
+    printf("STT\t| ID\t| Ten\t| Price\n");
+    PRINT_INFO(item, tmpDish);
+    INPUT_INPOMATION("NHAP ID MON: ", id_dish, 0);
+    for(int i = 0; i < tmpDish->size(); i++) {
+      if((tmp->at(i)).GetID() == id_dish) {
+        tmpDish->remove(tmpDish->begin() + i);
+        haveDish = 1;
+        break;
+      }
+    }
+    if(haveDish == -1) {
+      printf("KHONG TIM THAY MON AN CAN XOA\n"))
+    }
+  }
 }
 
+/*
+* Function: updateDish
+* Description: This function use for update Dish
+* Input:
+*   None
+* Output:
+*   return: None
+*/
 void Manager::getDish() {
-
+  if(listDish.empty()) {
+    printf("Danh sach Thuc Uong trong");
+  } else {
+    printf("STT\t| ID\t| Ten\t| Price\n");
+    PRINT_INFO(item, listDish);
+  }
 }
 
+/*
+* Function: updateDish
+* Description: This function use for update Dish
+* Input:
+*   None
+* Output:
+*   return: None
+*/
+int Manager::getNumberTables() {
+  return Manager::numberTables;
+}
+
+/*
+* Function: updateDish
+* Description: This function use for update Dish
+* Input:
+*   None
+* Output:
+*   return: None
+*/
 vector<Table> Manager::getListTable() {
-
+  return Manager::numberTables;
 }
 
+/*
+* Function: updateDish
+* Description: This function use for update Dish
+* Input:
+*   None
+* Output:
+*   return: None
+*/
 vector<Dish> Manager::getDishList() {
-
+  return Manager::listDish;
 }
 
+/**
+ * Class: Staff
+ * Description: this is Staff class
+ * Input:
+ *   Dont have input parameters`
+ * Output:
+ *   return: none
+*/
 class Staff {
   private: 
-    Manager mn;
+    // Manager mn;
+    vector<Table> listTable;
+    int noTable;
   public:
     Staff();
-    int showTableID();
-    void order(const int id);
+    void getStatusTables();
+    void selectTables(int noTable);
+
+    int getNumTables();
+    void getDataFromManager(Manager* manager);
+    void updateDataFromManager(Manager* manager);
     void getListDish(const int id);
+};
 
-} 
+/*
+* Function: updateDish
+* Description: This function use for update Dish
+* Input:
+*   None
+* Output:
+*   return: None
+*/
+void Staff::getDataFromManager(Manager* manager) {
+  Staff::noTable = manager->getNumberTables();
+  for(int i=0; i<Staff::noTable; i++) {
+    Table table(*manager);
+    listTable.push_back(table);
+  }
+}
 
+/*
+* Function: updateDish
+* Description: This function use for update Dish
+* Input:
+*   None
+* Output:
+*   return: None
+*/
+void Staff::updateDataFromManager(Manager* manager) {
+  int lastNoTables = Staff::noTable;
+  Staff::noTable = manager->getNumberTables();
+  for(int i = 0; i < manager->getNumberTables(); i++) {
+    Table table(*manager);
+    listTable.at(i).updateListDish(* manager);
+  }
+  for(int i = 0; i < Staff::noTable; i++) {
+    Table table(*manager);
+    listTable.push_back(table);
+  }
+}
+
+/*
+* Function: updateDish
+* Description: This function use for update Dish
+* Input:
+*   None
+* Output:
+*   return: None
+*/
+void Staff::getNumTables() {
+  return Staff::noTables;
+}
+
+/*
+* Function: updateDish
+* Description: This function use for update Dish
+* Input:
+*   None
+* Output:
+*   return: None
+*/
+void Staff::getStatusTables() {
+  if(listTable.empty()) {
+    printf("Danh sach chua duoc set");
+  } else {
+    printf("Ban\t|") {
+      for(int i = 0; i <= Staff::noTables; i++) {
+        printf("\t%d\t|", i);
+      }
+      printf("\n Status:\t|");
+      for(int i = 0; i <= Staff::noTables; i++) {
+        if(listTable.at(i).getStatus() == DA_DAT){
+          printf("\tX\t|");
+        } else {
+          printf("\tO\t|");
+        }
+      }
+    }
+  }
+}
+
+/*
+* Function: updateDish
+* Description: This function use for update Dish
+* Input:
+*   None
+* Output:
+*   return: None
+*/
+void Staff::selectTables(int noTables) {
+  int choice;
+  if(listTable.empty()) {
+    printf("Danh sach chua duoc set");
+  } else {
+    printf("1. Goi mon \n 2. Danh sach mon da goi\n 3. Thoanh Toan\n");
+    INPUT_INPOMATION('Moi Nhap: ', choice, choice > 3 || choice < 0);
+    switch (choice) {
+      case 1:
+        listTable.at(noTables).setListDish();
+        break;
+      case 2:
+        listTable.at(noTables).getListDish();
+        break;
+      default:
+        break;
+    }
+  }
+}
 /**
  * Class: Menu
  * Description: this is Menu class
@@ -277,18 +545,24 @@ class Staff {
  *   return: none
 */
 class Menu {
-  private:
-    Manager mn;
   public:
-    void manager();
-    void staff();
-    void showInfo()
+    Menu();
+    staff(Staff * staff);
+    manager(Manager * manager);
 }
 
+/*
+* Function: updateDish
+* Description: This function use for update Dish
+* Input:
+*   None
+* Output:
+*   return: None
+*/
 Menu::Menu() {
   uint8_t command;
   enum Command {
-      BACK = 0,
+      BACK,
       MANAGER,
       STAFF
   };
@@ -313,18 +587,70 @@ Menu::Menu() {
   }
 }
 
-Menu::manager() {
-
+/*
+* Function: updateDish
+* Description: This function use for update Dish
+* Input:
+*   None
+* Output:
+*   return: None
+*/
+Menu::staff(Staff * staff){
+  int choice;
+  do {
+    staff->getStatusTables();
+    INPUT_INPOMATION("Chon Ban: ", choice, choice > staff->getStatusTables());
+    switch(choice) {
+      case 0:
+        break;
+      case 1:
+        staff->selectTables(choice-1);
+        break;
+    }
+  } while(1); 
 }
 
-Menu::staff() {
-
-}
-
-menu::showInfo() {
-
+/*
+* Function: updateDish
+* Description: This function use for update Dish
+* Input:
+*   None
+* Output:
+*   return: None
+*/
+Menu::manager(Manager * manager){
+  int choice;
+  do {
+    INPUT_INPOMATION("Chon phuong thuc: ", choice, choice > 5 || choice < 0);
+    switch (choice) {
+      case 0:
+        return;
+      case 1:
+        manager->addDish();
+        break;
+      case 2:
+        manager->updateDish();
+        break;
+      case 3:
+        manager->removeDish();
+        break;
+      case 4:
+        manager->getListDish();
+        break;
+      case 5:
+        int no;
+        INPUT_INPOMATION("Nhap so luong ban: ", no, 1);
+        manager->getNumberTables(no);
+        break;
+      default:
+        break;
+    }
+  } while (1);
+  
+  
 }
 
 int main() {
+  Menu *menu = new Menu();
   return 0;
 }
