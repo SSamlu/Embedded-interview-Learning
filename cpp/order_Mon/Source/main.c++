@@ -15,7 +15,7 @@ using namespace std;
   do {                                  \
     cout << #text;                      \
     cin >> var;                         \
-  } while(checkCondition == 0);              
+  } while(checkCondition);              
   
 #define CHECK_INFO(condition, text1, status) \
   if(condition) {                           \
@@ -23,12 +23,34 @@ using namespace std;
     status;                             \
   }
 
-#define PRINT_INFO(item, Database)\
+#define PRINT_INFO(item, Database, numberOrder)\
   printf("STT\t| ID\t| Ten\t| Price\n");                                                  \
   for (auto item : Database) {                                                                                                 \
-    printf("%d\t| \t%s\t| \t%s\t| \t%d\n", item.getID(), item.getID(), item.getName(), item.getPrice()); \   \
+    printf("%d\t| \t%s\t| \t%s\t| \t%d\n", numberOrder, item.getID(), item.getName(), item.getPrice());   \
+    numberOrder++;\
   }                                                                                                                         \
   printf("\n");
+
+#define CHECK_LIST(dataVector, notify1, content)\
+  if(dataVector.empty()) {\
+    printf(notify1); \
+  } else {\
+    content \
+  }
+
+/**
+ * Function: Marco
+ * Discription: this is function marco
+ * Input:
+ *    content - content of method
+*/
+#define LIST(content, choice)\
+  do {\
+    content\
+    printf("NHAN PHIM 0 DE THOAT \n");\
+    cin >> choice;\
+  } while (choice == 1)
+
 /**
  * Class: Dish
  * Description: this is Dish class
@@ -42,15 +64,14 @@ class Dish {
     int ID;
     string nameDish;
     int priceDish;
-    int amountDish;
   public:
-    Dish();
+    Dish(string nameDish, int priceDish);
     // void SetID(const int id);
-    void SetName(const string name);
+    void setName(const string name);
     void setPrice(const int price);
-    unsigned int GetID();
+    int getID();
     string getName();
-    unsigned int getPrice();
+    int getPrice();
 };
 
 /*
@@ -61,10 +82,12 @@ class Dish {
 * Output:
 *   return: None
 */
-Dish:Dish(){
-  static id = 1;
-  Dish::ID = 1;
+Dish::Dish(string nameDish, int priceDish){
+  static int id = 100;
+  Dish::ID = id;
   id++;
+  this->nameDish = nameDish;
+  this->priceDish = priceDish;
 }
 
 /*
@@ -91,7 +114,7 @@ void Dish::setPrice(int price) {
   this->priceDish = price;
 }
 
-void Dish::GetID() {
+int Dish::getID() {
   return this->ID;
 }
 
@@ -103,7 +126,7 @@ void Dish::GetID() {
 * Output:
 *   return: Name of Dish
 */
-void Dish::getName() {
+string Dish::getName() {
   return this->nameDish;
 }
 
@@ -115,131 +138,73 @@ void Dish::getName() {
 * Output:
 *   return: Price of Dish
 */
-void Dish::getPrice() {
+int Dish::getPrice() {
   return this->priceDish;
 }
 
+class OrderDish {
+  private:
+    int quantityDish;
+    string nameDish;
+    int priceDish;
+    int IDDish;
+  public:
+    OrderDish(int id, string name, int quantity, int price);
+    void setQuantity(int quantity);
+    int getQuantity();
+    string getName();
+    int getPrice();
+    int getIDDish();
+};
 
+  OrderDish::OrderDish(int id, string name, int quantity, int price) {
+    this->IDDish = id;
+    this->nameDish = name;
+    this->priceDish = price;
+    this->quantityDish = quantity; 
+  };
+
+/*
+ * Function: setQuantity
+ * Description: 
+ * Input:
+ *  quantity - quantity of dish 
+*/
+void OrderDish::setQuantity(int quantity) {
+  OrderDish::quantityDish = quantity;
+};
+
+/*
+ * Function: getQuantity
+ * Description: 
+ * Output:
+ *  Return - quantity of dish 
+*/
+int OrderDish::getQuantity() {
+  return OrderDish::quantityDish; // this->quantityDish
+}
+
+string OrderDish::getName() {
+  return OrderDish::nameDish; // this->nameDish
+}
+
+int OrderDish::getPrice() {
+  return OrderDish::priceDish; // this->priceDish
+}
+
+int OrderDish::getIDDish() {
+  return OrderDish::IDDish; // this->idDish
+}
 typedef enum {
   CHUA_DAT,
   DA_DAT
 } statusTable;
-
-class Manager;
-
-/**
- * Class: Table
- * Description: this is Table class
- * Input:
- *   Dont have input parameters`
- * Output:
- *   return: none
-*/
-class Table {
-  private:
-    int tableID;
-    statusTable status;
-    vector<Dish> listDish;
-  public:
-    Table(Manager manager);
-    void setTableID(const int id);
-    void setStatus(statusTable status);
-    void setListDish(vector<Dish> listDish);
-    int getTableID();
-    statusTable getStatus();
-    // vector<Dish> getListDish();
-};
-
-/*
-* Function: Dish
-* Description: This function use for constructor Dish
-* Input:
-*   none
-* Output:
-*   return: None
-*/
-Table::Table() {
-
-}
-
-/*
-* Function: setName
-* Description: This function use for set name of Dish
-* Input:
-*   name - string
-* Output:
-*   return: None
-*/
-void Table::setTableID(const int id) {
-  this->tableID = id;
-};
-
-/*
-* Function: setName
-* Description: This function use for set name of Dish
-* Input:
-*   name - string
-* Output:
-*   return: None
-*/
-void Table::setStatus (statusTable status) {
-  this->status = status;
-};
-
-/*
-* Function: setName
-* Description: This function use for set name of Dish
-* Input:
-*   name - string
-* Output:
-*   return: None
-*/
-void Table::setListDish(vector<Dish> listDish) {
-  typedef enum {
-    CLEAR_DISH,
-    ORDER_DISH
-  } status;
-
-  
-  switch (status) {
-    case CLEAR_DISH:
-      this->listDish.clear();
-      break;
-    case ORDER_DISH:
-      this->listDish.push_back(listDish);
-      break;
-    default:
-      break;
-  }
-}
-
-/*
-* Function: getTableID
-* Description: This function use for get  number Table
-* Input:
-*   Dont have input parameters
-* Output:
-*   return: tableID of Table
-*/
-int Table::getTableID() {
-  return this->tableID;
-}
-
-statusTable Table::getStatus() {
-  return this->status;
-}
-
-// vector<Dish> Table::getListDish() {
-//   return this->listDish;
-// }
-
 
 class Manager {
   private:
     int idDish;
     int numberTables;
     vector<Dish> listDish;
-    vector<Table> listTable;
   public:
     void setNumberTables(int quantityTables);
     void addDish();
@@ -247,7 +212,7 @@ class Manager {
     void removeDish();
     void getDish();
     int getNumberTables();
-    vector<Table> getListTable();
+    // vector<Table> getListTable();
     vector<Dish> getListDish();
 };
 
@@ -260,8 +225,7 @@ class Manager {
 *   return: None
 */
 void Manager::setNumberTables(int quantityTables) {
-  // INPUT_INPOMATION("NHAP SO LUONG BAN: ", id_Dish, id_Dish < 0);
-  Manager::numberTables = quantityTables
+  Manager::numberTables = quantityTables;
 };
 
 /*
@@ -274,13 +238,15 @@ void Manager::setNumberTables(int quantityTables) {
 */
 void Manager::addDish() {
   string name_dish;
+  int choice;
   int price_dish;
-  INPUT_INPOMATION("NHAP TEN MON: ", name_dish, 0);
-  INPUT_INPOMATION("NHAP GIA: ", price_dish, price_dish < 0);
-
-  Dish dish(name_dish, price_dish);
-
-  Manager::listDish.push_back(dish);
+  LIST(
+    INPUT_INPOMATION("NHAP TEN MON: ", name_dish, 0);
+    INPUT_INPOMATION("NHAP GIA: ", price_dish, price_dish < 0);
+    Dish dish(name_dish, price_dish);
+    this->listDish.push_back(dish);
+    printf("Nhan phim 1 De tiep tuc\n");, choice
+  );
 }
 
 /*
@@ -300,17 +266,18 @@ void Manager::updateDish() {
   if(listDish.empty()) {
     printf("Danh sach Thuc Uong trong");
   } else {
-    PRINT_INFO(item, listDish);
+    int orderNo = 1;
+    PRINT_INFO(item, Manager::listDish, orderNo);
     // for (Dish item : listDish) {
       
     // }
     INPUT_INPOMATION("NHAP ID MON: ", id_dish, 0);
     for(int i = 0; i < tmpDish->size(); i++) {
-      if((tmp->at(i)).GetID() == id_dish) {
+      if((tmpDish->at(i)).getID() == id_dish) {
         INPUT_INPOMATION("NHAP TEN MON: ", name_dish, 0);
         INPUT_INPOMATION("NHAP GIA: ", price_dish, price_dish < 0);
-        tmpDish->at(i).SetName(name_dish);
-        tmpDish->at(i).SetPrice(price_dish);
+        tmpDish->at(i).setName(name_dish);
+        tmpDish->at(i).setPrice(price_dish);
         haveDish = 1;
         break;
       }
@@ -340,18 +307,18 @@ void Manager::removeDish() {
   if(tmpDish->empty()) {
     printf("Danh sach Thuc Uong trong");
   } else {
-    printf("STT\t| ID\t| Ten\t| Price\n");
-    PRINT_INFO(item, tmpDish);
+    int orderNo = 1;
+    PRINT_INFO(item, Manager::listDish, orderNo);
     INPUT_INPOMATION("NHAP ID MON: ", id_dish, 0);
     for(int i = 0; i < tmpDish->size(); i++) {
-      if((tmp->at(i)).GetID() == id_dish) {
-        tmpDish->remove(tmpDish->begin() + i);
+      if((tmpDish->at(i)).getID() == id_dish) {
+        tmpDish->erase(tmpDish->begin() + i);
         haveDish = 1;
         break;
       }
     }
     if(haveDish == -1) {
-      printf("KHONG TIM THAY MON AN CAN XOA\n"))
+      printf("KHONG TIM THAY MON AN CAN XOA\n");
     }
   }
 }
@@ -368,8 +335,8 @@ void Manager::getDish() {
   if(listDish.empty()) {
     printf("Danh sach Thuc Uong trong");
   } else {
-    printf("STT\t| ID\t| Ten\t| Price\n");
-    PRINT_INFO(item, listDish);
+    int noOrder = 1
+    PRINT_INFO(item, Manager::listDish, noOrder);
   }
 }
 
@@ -393,9 +360,9 @@ int Manager::getNumberTables() {
 * Output:
 *   return: None
 */
-vector<Table> Manager::getListTable() {
-  return Manager::numberTables;
-}
+// vector<Table> Manager::getListTable() {
+//   return Manager::numberTables;
+// }
 
 /*
 * Function: updateDish
@@ -407,6 +374,149 @@ vector<Table> Manager::getListTable() {
 */
 vector<Dish> Manager::getListDish() {
   return Manager::listDish;
+}
+
+/**
+ * Class: Table
+ * Description: this is Table class
+ * Input:
+ *   Dont have input parameters`
+ * Output:
+ *   return: none
+*/
+class Table {
+  private:
+    int tableID;
+    statusTable status;
+    vector<Dish> listDish;
+    vector<OrderDish> listOrderDish;
+    
+  public:
+    Table(Manager manager);
+    void setTableID(const int id);
+    void setStatus(statusTable status);
+    void updateListDish(Manager manager);
+
+    int getTableID();
+    statusTable getStatus();
+    void orderDish();
+    vector<Dish> getListDish();
+};
+
+/*
+* Function: Dish
+* Description: This function use for constructor Table, copy list dish of manager created to order
+* Input:
+*   manager - object Manager
+* Output:
+*   return: None
+*/
+Table::Table(Manager manager) {
+  for(auto data : manager.getListDish()) {
+    this->listDish.push_back(data);
+  }
+}
+
+/*
+* Function: setName
+* Description: This function use for set name of Dish
+* Input:
+*   name - string
+* Output:
+*   return: None
+*/
+void Table::setTableID(const int id) {
+  this->tableID = id;
+};
+
+/*
+* Function: setName
+* Description: This function use for set name of Dish
+* Input:
+*   name - string
+* Output:
+*   return: None
+*/
+void Table::setStatus(statusTable status) {
+  this->status = status;
+};
+
+/*
+* Function: setName
+* Description: This function use for set name of Dish
+* Input:
+*   name - string
+* Output:
+*   return: None
+*/
+void Table::orderDish() {
+  int key;
+  int id_dish;
+  int quantity;
+  vector<Dish> *tmpDish = &listDish;
+  int haveDish = -1;
+  CHECK_LIST(
+    listDish,
+    "Danh sach mon an trong\n",
+    int numberOrder = 1;
+    PRINT_INFO(item, Table::listDish, numberOrder);
+    LIST(
+      INPUT_INPOMATION("Nhap ID Mon An: ", id_dish, 0);
+      for(int i = 0; i < tmpDish->size(); i++) {
+        if(tmpDish->at(i).getID() == id_dish) {
+          INPUT_INPOMATION("NHAP SO LUONG MON: ", quantity, quantity < 0);
+          OrderDish dish(tmpDish->at(i).getID(), tmpDish->at(i).getName(), quantity, tmpDish->at(i).getPrice());
+          listOrderDish.push_back(dish);
+          Table::status = DA_DAT;
+          haveDish = 1;
+          break;
+        }
+      }
+      if(haveDish != -1) {
+        printf("KHONG CO THONG TIN CUA MON AN\n");
+      },
+      key
+    );
+  )
+}
+
+/*
+* Function: getTableID
+* Description: This function use for get  number Table
+* Input:
+*   Dont have input parameters
+* Output:
+*   return: tableID of Table
+*/
+int Table::getTableID() {
+  return this->tableID;
+}
+
+/*
+* Function: getStatus
+* Description: This function use for get  number Table
+* Input:
+*   Dont have input parameters
+* Output:
+*   return: tableID of Table
+*/
+statusTable Table::getStatus() {
+  return this->status;
+}
+
+/*
+* Function: updateListDish
+* Description: This function use for update List Dish
+* Input:
+*   Dont have input parameters
+* Output:
+*   return: tableID of Table
+*/
+void Table::updateListDish(Manager manager) {
+  Table::listDish.clear();
+  for(auto item : manager.getListDish()) {
+    listDish.push_back(item);
+  }
 }
 
 /**
@@ -451,18 +561,19 @@ void Staff::getDataFromManager(Manager* manager) {
 
 /*
 * Function: updateDish
-* Description: This function use for update Dish
+* Description: This function use to update Data From Manager
 * Input:
-*   None
+*   manager - object
 * Output:
 *   return: None
 */
 void Staff::updateDataFromManager(Manager* manager) {
   int lastNoTables = Staff::noTable;
   Staff::noTable = manager->getNumberTables();
-  for(int i = 0; i < manager->getNumberTables(); i++) {
+  // update info dish
+  for(int i = 0; i < lastNoTables; i++) {
     Table table(*manager);
-    listTable.at(i).updateListDish(* manager);
+    listTable.at(i).updateListDish(*manager);
   }
   for(int i = 0; i < Staff::noTable; i++) {
     Table table(*manager);
@@ -476,10 +587,10 @@ void Staff::updateDataFromManager(Manager* manager) {
 * Input:
 *   None
 * Output:
-*   return: None
+*   return: number Table
 */
-void Staff::getNumTables() {
-  return Staff::noTables;
+int Staff::getNumTables() {
+  return Staff::noTable;
 }
 
 /*
@@ -494,19 +605,18 @@ void Staff::getStatusTables() {
   if(listTable.empty()) {
     printf("Danh sach chua duoc set");
   } else {
-    printf("Ban\t|") {
-      for(int i = 0; i <= Staff::noTables; i++) {
-        printf("\t%d\t|", i);
-      }
-      printf("\n Status:\t|");
-      for(int i = 0; i <= Staff::noTables; i++) {
+    printf("Ban\t|");
+    for(int i = 0; i <= Staff::noTable; i++) {
+      printf("\t%d\t|", i);
+    }
+    printf("\n Status:\t|");
+    for(int i = 0; i <= Staff::noTable; i++) {
         if(listTable.at(i).getStatus() == DA_DAT){
           printf("\tX\t|");
         } else {
           printf("\tO\t|");
         }
       }
-    }
   }
 }
 
@@ -523,15 +633,19 @@ void Staff::selectTables(int noTables) {
   if(listTable.empty()) {
     printf("Danh sach chua duoc set");
   } else {
+    printf("------BAN %d------\n",noTable + 1);
     printf("1. Goi mon \n 2. Danh sach mon da goi\n 3. Thoanh Toan\n");
+    printf("0. Thoat\n");
     INPUT_INPOMATION('Moi Nhap: ', choice, choice > 3 || choice < 0);
     switch (choice) {
       case 1:
-        listTable.at(noTables).setListDish();
+        listTable.at(noTables).orderDish();
         break;
       case 2:
         listTable.at(noTables).getListDish();
         break;
+      case 0:
+        return;
       default:
         break;
     }
@@ -550,7 +664,7 @@ class Menu {
     Menu();
     staff(Staff * staff);
     manager(Manager * manager);
-}
+};
 
 /*
 * Function: updateDish
@@ -561,25 +675,32 @@ class Menu {
 *   return: None
 */
 Menu::Menu() {
-  uint8_t command;
+  int command;
+  Manager mn;
+  Staff st;
   enum Command {
       BACK,
       MANAGER,
       STAFF
   };
-  while(1){
-    cin >> command;
+  while(1) {
+    printf("------CHUONG TRINH QUAN LY ORDER THUC UONG------\n");
+    printf("1. Quan ly\n");
+    printf("2. Nhan Vien\n");
+    printf("0. Thoat\n");
+    printf("-------------------------------------------\n");
+    INPUT_INPOMATION("Nhan phim : ", command, command > 2 || command < 0);
     switch (command) {
     case BACK:
-        return 0;
-        break;
-
+      exit(0);
+      break;
     case MANAGER:
-        manager();
+        manager(&mn);
+        st.getDataFromManager(&mn); //get Data from manager
         break;
-
     case STAFF:
-        staff();
+        st.updateDataFromManager(&mn); //update data from manager
+        staff(&st);
         break;
     default:
         printf("KHONG CO LENH NAY\n");
@@ -599,10 +720,14 @@ Menu::Menu() {
 Menu::staff(Staff * staff){
   int choice;
   do {
+    printf("*--Nhan vien--*");
     staff->getStatusTables();
-    INPUT_INPOMATION("Chon Ban: ", choice, choice > staff->getStatusTables());
+    printf("\n0. Thoat\n");
+    printf("----------------");
+    INPUT_INPOMATION("Chon Ban: ", choice, choice > staff->getNumTables() || choice < 0);
     switch(choice) {
       case 0:
+        exit(0);
         break;
       case 1:
         staff->selectTables(choice-1);
@@ -619,13 +744,19 @@ Menu::staff(Staff * staff){
 * Output:
 *   return: None
 */
-Menu::manager(Manager * manager){
+Menu::manager(Manager* manager){
   int choice;
   do {
+    printf("------QUAN LY------\n");
+    printf("1. Them mon\n");
+    printf("2. Sua mon\n");
+    printf("3. Xoa mon\n");
+    printf("4. Danh sach mon an\n");
+    printf("5. Dat so luong ban\n");
+    printf("0. Thoat\n");
+    printf("-------------------------------------------\n");
     INPUT_INPOMATION("Chon phuong thuc: ", choice, choice > 5 || choice < 0);
     switch (choice) {
-      case 0:
-        return;
       case 1:
         manager->addDish();
         break;
@@ -641,8 +772,10 @@ Menu::manager(Manager * manager){
       case 5:
         int no;
         INPUT_INPOMATION("Nhap so luong ban: ", no, 1);
-        manager->getNumberTables(no);
+        manager->setNumberTables(no);
         break;
+      case 0:
+        return 0;
       default:
         break;
     }
