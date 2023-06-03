@@ -24,10 +24,9 @@ using namespace std;
   }
 
 #define PRINT_INFO(item, Database)\
-  printf("\nID\t TEN\t\t GIOITINH\t TUOI\t TOAN\t LY\t HOA\t GPA\t HOCLUC\n");                                                  \
+  printf("STT\t| ID\t| Ten\t| Price\n");                                                  \
   for (auto item : Database) {                                                                                                 \
-    printf("%d\t %s\t\t %s\t\t %d\t %.2lf\t %.2lf\t %.2lf\t %.2lf\t %d\n", item.getID(), item.getName().c_str(), item.getGioiTinh().c_str(),\
-    item.getAge(), item.getDiemToan(), item.getDiemLy(), item.getDiemHoa(), item.getDiemTrungBinh(), item.getHocLuc());   \
+    printf("%d\t| \t%s\t| \t%s\t| \t%d\n", item.getID(), item.getID(), item.getName(), item.getPrice()); \   \
   }                                                                                                                         \
   printf("\n");
 /**
@@ -126,6 +125,8 @@ typedef enum {
   DA_DAT
 } statusTable;
 
+class Manager;
+
 /**
  * Class: Table
  * Description: this is Table class
@@ -140,13 +141,13 @@ class Table {
     statusTable status;
     vector<Dish> listDish;
   public:
-    Table();
+    Table(Manager manager);
     void setTableID(const int id);
     void setStatus(statusTable status);
     void setListDish(vector<Dish> listDish);
     int getTableID();
     statusTable getStatus();
-    vector<Dish> getListDish();
+    // vector<Dish> getListDish();
 };
 
 /*
@@ -199,6 +200,7 @@ void Table::setListDish(vector<Dish> listDish) {
     ORDER_DISH
   } status;
 
+  
   switch (status) {
     case CLEAR_DISH:
       this->listDish.clear();
@@ -227,9 +229,9 @@ statusTable Table::getStatus() {
   return this->status;
 }
 
-vector<Dish> Table::getListDish() {
-  return this->listDish;
-}
+// vector<Dish> Table::getListDish() {
+//   return this->listDish;
+// }
 
 
 class Manager {
@@ -298,7 +300,6 @@ void Manager::updateDish() {
   if(listDish.empty()) {
     printf("Danh sach Thuc Uong trong");
   } else {
-    printf("STT\t| ID\t| Ten\t| Price\n");
     PRINT_INFO(item, listDish);
     // for (Dish item : listDish) {
       
@@ -404,7 +405,7 @@ vector<Table> Manager::getListTable() {
 * Output:
 *   return: None
 */
-vector<Dish> Manager::getDishList() {
+vector<Dish> Manager::getListDish() {
   return Manager::listDish;
 }
 
@@ -429,7 +430,7 @@ class Staff {
     int getNumTables();
     void getDataFromManager(Manager* manager);
     void updateDataFromManager(Manager* manager);
-    void getListDish(const int id);
+    vector<Dish> getListDish();
 };
 
 /*
