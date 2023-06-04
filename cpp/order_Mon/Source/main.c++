@@ -144,7 +144,7 @@ int Dish::getPrice() {
 
 class OrderDish {
   private:
-    int quantityDish;
+    int quantityDish = 0;
     string nameDish;
     int priceDish;
     int IDDish;
@@ -203,7 +203,7 @@ typedef enum {
 class Manager {
   private:
     int idDish;
-    int numberTables;
+    int numberTables = 0;
     vector<Dish> listDish;
   public:
     void setNumberTables(int quantityTables);
@@ -343,7 +343,7 @@ void Manager::getDish() {
     listDish,
     "List order null\n",
     LIST(
-      printf("----List Dish----");
+      printf("----List Dish----\n");
       int orderNo;
       PRINT_INFO(item, Manager::listDish, orderNo);
       printf("Hay nhan phim 1 neu ban muon tiep tuc");
@@ -398,7 +398,7 @@ vector<Dish> Manager::getListDish() {
 class Table {
   private:
     int tableID;
-    statusTable status;
+    statusTable status = CHUA_DAT;
     vector<Dish> listDish;
     vector<OrderDish> listOrderDish;
     
@@ -537,7 +537,7 @@ void Table::getOrderDish() {
     this->listDish,
     "List order is null\n",
     LIST(
-      printf("----List Dish----");
+      printf("----List Dish----\n");
       int orderNo;
       PRINT_INFO(item, Table::listDish, orderNo);
       printf("Hay nhan phim 1 neu ban muon tiep tuc");
@@ -557,7 +557,7 @@ class Staff {
   private: 
     // Manager mn;
     vector<Table> listTable;
-    int noTable;
+    int noTable = 0;
   public:
     // Staff();
     void getStatusTables();
@@ -629,19 +629,21 @@ int Staff::getNumTables() {
 */
 void Staff::getStatusTables() {
   CHECK_LIST(
-    this->listTable,
+    Staff::listTable,
     "Table of your is null\n",
     printf("----Status table----\n");
-    printf("Ban\t|");
-    for(int i = 0; i <= Staff::noTable; i++) {
+    printf("Ban     |");
+    for(int i = 1; i <= Staff::noTable; i++) {
       printf("\t%d\t|", i);
     }
-    printf("\n Status:\t|");
-    for(int i = 0; i <= Staff::noTable; i++) {
+    printf("\nStatus: |");
+    for(int i = 0; i < Staff::noTable; i++) {
       if(listTable.at(i).getStatus() == DA_DAT){
         printf("\tX\t|");
       } else {
+        cout << listTable.at(i).getStatus();
         printf("\tO\t|");
+        break;
       }
     }
   );
@@ -750,15 +752,14 @@ Menu::Menu() {
 Menu::staff(Staff * staff){
   int choice;
   do {
-    printf("*--Nhan vien--*");
+    printf("*--Nhan vien--*\n");
     staff->getStatusTables();
     printf("\n0. Thoat\n");
     printf("----------------");
     INPUT_INPOMATION("Chon Ban: ", choice, choice > staff->getNumTables() || choice < 0);
     switch(choice) {
       case 0:
-        exit(0);
-        break;
+        return 0;
       case 1:
         staff->selectTables(choice-1);
         break;
@@ -777,7 +778,7 @@ Menu::staff(Staff * staff){
 Menu::manager(Manager* manager){
   int choice;
   do {
-    printf("------QUAN LY------\n");
+    printf("\n------QUAN LY------\n");
     printf("1. Them mon\n");
     printf("2. Sua mon\n");
     printf("3. Xoa mon\n");
@@ -801,7 +802,7 @@ Menu::manager(Manager* manager){
         break;
       case 5:
         int no;
-        INPUT_INPOMATION("Nhap so luong ban: ", no, 1);
+        INPUT_INPOMATION("Nhap so luong ban: ", no, 0);
         manager->setNumberTables(no);
         break;
       case 0:
@@ -816,5 +817,6 @@ Menu::manager(Manager* manager){
 
 int main() {
   Menu *menu = new Menu();
+  delete menu;
   return 0;
 }
