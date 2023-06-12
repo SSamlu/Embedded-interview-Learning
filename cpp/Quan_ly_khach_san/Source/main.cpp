@@ -124,7 +124,7 @@ class HotelManager {
     void displayAvailableRooms();
     void bookRoom(uint8_t roomNumber);
     void checkIn(uint8_t roomNumber);
-    void checkOut(uint roomNumber);
+    void checkOut(uint8_t roomNumber);
   public:
     HotelManager();
     void addRoom(uint8_t roomNumber);
@@ -142,7 +142,7 @@ class HotelManager {
 HotelManager::HotelManager() {
   while(1) {
     printf("*****Hotel Manager*****\n");
-    printf("1. Display available rooms \n 2. Book a room\n 3. Check in to a Room\n 4. Check out the Room\n 5. Exit\n");
+    printf(" 1. Display available rooms \n 2. Book a room\n 3. Check in to a Room\n 4. Check out the Room\n 5. Exit\n");
     printf("Enter: ");
     int choice;
     cin >> choice;
@@ -157,16 +157,16 @@ HotelManager::HotelManager() {
         this->bookRoom(roomNo);
         break;
       case 3:
-        uint8_t roomNo;
+        uint8_t roomNo1;
         cout << "Enter the room number: ";
-        cin >> roomNo;
-        this->checkIn(roomNo);
+        cin >> roomNo1;
+        this->checkIn(roomNo1);
         break;
       case 4:
-        uint8_t roomNo;
+        uint8_t roomNo2;
         cout << "Enter the room number: ";
-        cin >> roomNo;
-        this->checkOut(roomNo);
+        cin >> roomNo2;
+        this->checkOut(roomNo2);
         break;
       case 5:
         exit(0);
@@ -187,7 +187,7 @@ HotelManager::HotelManager() {
 */
 void HotelManager::displayAvailableRooms(){
   cout << "available Rooms: " << endl;
-  for(auto item : this->availableRooms) {
+  for(auto item : this->databaseRooms) {
     if(item.isAvailable()) {
       cout << "Room: " << (int)item.getRoomNumber() << endl;
     }
@@ -207,7 +207,7 @@ void HotelManager::bookRoom(uint8_t roomNumber) {
     if(item.getRoomNumber() == roomNumber) {
       item.bookRoom();
       cout << "Booked Room " << (int)roomNumber << endl;
-      return 0;
+      return;
     }
   }
   cout << "No Room " << (int)roomNumber << endl;
@@ -217,7 +217,7 @@ void HotelManager::bookRoom(uint8_t roomNumber) {
 * Function: checkIn
 * Description: This function use for of check In of HotelManager class
 * Input:
-*   None
+*   roomNumber - uint8_t
 * Output:
 *   return: None
 */
@@ -226,7 +226,7 @@ void HotelManager::checkIn(uint8_t roomNumber) {
     if(item.getRoomNumber() == roomNumber) {
       item.checkIn();
       cout << "Checked In Room " << (int)roomNumber << endl;
-      return 0;
+      return;
     }
   }
   cout << "No Room " << (int)roomNumber << endl;
@@ -240,12 +240,14 @@ void HotelManager::checkIn(uint8_t roomNumber) {
 * Output:
 *   return: None
 */
-void HotelManager::checkOut(uint roomNumber) {
-  if(item.getRoomNumber() == roomNumber) {
+void HotelManager::checkOut(uint8_t roomNumber) {
+  for(auto& item : this->databaseRooms) {
+    if(item.getRoomNumber() == roomNumber) {
       item.checkOut();
       cout << "Checked Out Room " << (int)roomNumber << endl;
-      return 0;
+      return;
     }
+  }
   cout << "No Room " << (int)roomNumber << endl;
 };
 
@@ -258,7 +260,7 @@ void HotelManager::checkOut(uint roomNumber) {
 *   return: None
 */
 void HotelManager::addRoom(uint8_t roomNumber) {
-  this->databaseRooms.push_back(Room::Room(roomNumber));
+  this->databaseRooms.push_back(Room(roomNumber));
 };
 
 int main() {
