@@ -49,9 +49,16 @@ class Customer {
     string address;
     vector<BookingHistory> bookingHistories;
   public:
-    Customer(string customerName, string customerPhone, string customerAddress);
-    stirng getName();
+    Customer(uint8_t id, string customerName, string customerPhone, string customerAddress);
+    string getName();
+    string getPhoneNumber();
+    string getAddress();
     uint8_t getID();
+
+    void setPhoneNumber(string phone);
+    void setName(string name);
+    void setAddress(string address);
+
     void bookingHistory(BookingHistory bookingDetails);
     void displayBookingHistory();
 }
@@ -64,7 +71,7 @@ class Customer {
 * Output:
 *   return: None
 */
-Customer::Customer(uint8_t id, customerName, string customerPhone, string customerAddress) {
+Customer::Customer(uint8_t id, string customerName, string customerPhone, string customerAddress) {
   this->idRoom = id;
   this->name = customerName;
   this->phoneNumber = customerPhone;
@@ -103,7 +110,43 @@ uint8_t Customer::getID() {
 * Output:
 *   return: None
 */
-Customer::bookingHistory(BookingHistory bookingDetails) {
+void Customer::setPhoneNumber(string phone) {
+  this->phoneNumber = phone;
+};
+
+/*
+* Function: bookingHistory
+* Description: This function use for get bookingHistory
+* Input:
+*   bookingDetails - BookingHistory
+* Output:
+*   return: None
+*/
+void Customer::setName(string name) {
+  this->name = name;
+};
+
+/*
+* Function: bookingHistory
+* Description: This function use for get bookingHistory
+* Input:
+*   bookingDetails - BookingHistory
+* Output:
+*   return: None
+*/
+void Customer::setAddress(string address) {
+  this->address = address;
+};
+
+/*
+* Function: bookingHistory
+* Description: This function use for get bookingHistory
+* Input:
+*   bookingDetails - BookingHistory
+* Output:
+*   return: None
+*/
+void Customer::bookingHistory(BookingHistory bookingDetails) {
   this->bookingHistories.push_back(bookingDetails);
 }
 
@@ -169,10 +212,14 @@ void CustomerManager::addCustomer(uint8_t idRoom, string customerName, string cu
 void CustomerManager::editCustomer(uint8_t idRoom) {
   for(auto customer : this->databaseCustomers) {
     if(customer.getID() == idRoom) {
-      string newPhone;
+      string newPhone, name, address;
       cin >> newPhone;
-      customer.phoneNumber = newPhone;
-      cout << "Edit phone customer tai phong" << idRoom << endl;
+      customer.setPhoneNumber(newPhone);
+      cin >> name;
+      customer.setName(name);
+      cin >> address;
+      customer.setName(address);
+      cout << "Edit informaion customer tai phong" << idRoom << endl;
       return 0;
     }
   }
@@ -184,7 +231,7 @@ void CustomerManager::deleteCustomer(uint8_t idRoom) {
     if(customer.getID() == idRoom) {
       this->databaseCustomers.erase(customer);
       cout << "Delete customer at Room" << idRoom << endl;
-      return 0;
+      return;
     }
   }
   cout << "ID Room "  << idRoom << "not found" <<endl;
@@ -200,7 +247,7 @@ void CustomerManager::deleteCustomer(uint8_t idRoom) {
 */
 void CustomerManager::displayCustomerInfo(uint8_t idRoom) {
   for(auto customer : this->databaseCustomers) {
-    if(customer.getID() = idRoom) {
+    if(customer.getID() == idRoom) {
       cout << "***Customer information***" << endl;
       cout << "Customer name" << customer.getName() << endl;
       cout << "Customer ID Room" << customer.getID() << endl;

@@ -228,7 +228,7 @@ void ServiceManager::displayService() {
     cout << "No service!" << endl;
   } else {
     for(auto& service : this->databaseServices) {
-      this->databaseServices.erase(service)
+      this->databaseServices.erase(service);
     }
   }
 }
