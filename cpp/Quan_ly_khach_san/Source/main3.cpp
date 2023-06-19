@@ -144,7 +144,7 @@ class ServiceManager {
     void editService();
     void removeService();
     void displayService();
-}
+};
 
 /*
 * Function: addService
@@ -209,7 +209,7 @@ void ServiceManager::removeService() {
   if(this->databaseServices.empty()) {
     cout << "No service!" << endl;
   } else {
-    for(auto& service : this->databaseServices) {
+    for(auto service : this->databaseServices) {
       this->databaseServices.erase(service)
     }
   }
@@ -227,7 +227,7 @@ void ServiceManager::displayService() {
   if(this->databaseServices.empty()) {
     cout << "No service!" << endl;
   } else {
-    for(auto& service : this->databaseServices) {
+    for(auto service : this->databaseServices) {
       this->databaseServices.erase(service);
     }
   }

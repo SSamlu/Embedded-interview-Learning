@@ -1,0 +1,16 @@
+main.c:74:6:HAL_SPI_RxCpltCallback	24	static
+main.c:98:6:HAL_SPI_TxRxCpltCallback	16	static
+main.c:122:6:digitalWirte	16	static
+main.c:135:6:SPIInit	8	static
+main.c:150:7:clockSPIGenerate	8	static
+main.c:164:6:SPISlaveStatus	16	static
+main.c:175:6:SPITransmitData	24	static
+main.c:194:9:SPIReceiveData	16	static
+main.c:216:6:SPITransmitDataSlave	24	static
+main.c:235:9:SPIReceiveDataSlave	16	static
+main.c:255:5:main	16	static
+main.c:323:6:SystemClock_Config	72	static
+main.c:359:13:MX_SPI1_Init	8	static
+main.c:397:13:MX_SPI2_Init	8	static
+main.c:435:13:MX_GPIO_Init	32	static
+main.c:479:6:Error_Handler	4	static
