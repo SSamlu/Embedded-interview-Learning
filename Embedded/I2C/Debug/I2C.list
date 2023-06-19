@@ -37,11 +37,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
  16 .debug_macro  00016c00  00000000  00000000  0002e520  2**0
                   CONTENTS, READONLY, DEBUGGING
- 17 .debug_line   000098cf  00000000  00000000  00045120  2**0
+ 17 .debug_line   000098cd  00000000  00000000  00045120  2**0
                   CONTENTS, READONLY, DEBUGGING
- 18 .debug_str    0008681e  00000000  00000000  0004e9ef  2**0
+ 18 .debug_str    0008681e  00000000  00000000  0004e9ed  2**0
                   CONTENTS, READONLY, DEBUGGING
- 19 .comment      0000007b  00000000  00000000  000d520d  2**0
+ 19 .comment      0000007b  00000000  00000000  000d520b  2**0
                   CONTENTS, READONLY
  20 .debug_frame  00003670  00000000  00000000  000d5288  2**2
                   CONTENTS, READONLY, DEBUGGING
@@ -263,12 +263,12 @@ void I2C_Send_Byte(uint8_t txBuffer){
  800028c:	2000      	movs	r0, #0
  800028e:	f7ff ff5d 	bl	800014c <modeSDA>
 
-	if(HAL_GPIO_ReadPin(GPIOB, SDA_Master_Pin) == HIGH_MODE) {
+	if(HAL_GPIO_ReadPin(GPIOB, SDA_Master_Pin) == ACK) {
  8000292:	f44f 4180 	mov.w	r1, #16384	; 0x4000
  8000296:	4812      	ldr	r0, [pc, #72]	; (80002e0 <I2C_Send_Byte+0xbc>)
  8000298:	f000 fe2a 	bl	8000ef0 <HAL_GPIO_ReadPin>
  800029c:	4603      	mov	r3, r0
- 800029e:	2b01      	cmp	r3, #1
+ 800029e:	2b00      	cmp	r3, #0
  80002a0:	d104      	bne.n	80002ac <I2C_Send_Byte+0x88>
 		modeSDA(GPIO_MODE_OUTPUT_PP);
  80002a2:	2001      	movs	r0, #1
@@ -371,8 +371,6 @@ void HAL_I2C_SlaveRxCpltCallback(I2C_HandleTypeDef *hi2c) {
  8000342:	781a      	ldrb	r2, [r3, #0]
  8000344:	4b05      	ldr	r3, [pc, #20]	; (800035c <HAL_I2C_SlaveRxCpltCallback+0x38>)
  8000346:	701a      	strb	r2, [r3, #0]
-//				  	}
-//			HAL_I2C_Slave_Receive_IT(&hspi1, &i2cSlaveRX, 1);
 		}
 
 	}

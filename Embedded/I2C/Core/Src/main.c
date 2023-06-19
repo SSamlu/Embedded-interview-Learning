@@ -102,7 +102,7 @@ void I2C_Send_Byte(uint8_t txBuffer){
 	}
 	modeSDA(GPIO_MODE_INPUT); //listen ACK is 0 or 1
 
-	if(HAL_GPIO_ReadPin(GPIOB, SDA_Master_Pin) == HIGH_MODE) {
+	if(HAL_GPIO_ReadPin(GPIOB, SDA_Master_Pin) == ACK) {
 		modeSDA(GPIO_MODE_OUTPUT_PP);
 		I2C_Stop();
 	}
@@ -202,32 +202,20 @@ void HAL_I2C_SlaveRxCpltCallback(I2C_HandleTypeDef *hi2c) {
 	if (hi2c->Instance == I2C1) {
 		if (hi2c->XferCount == 1) { // Chỉ nhận được 1 byte dữ liệu
 			rx = i2cSlaveRX;
-//			rxBuffer[RX_Index] = spiSlaveRX;
-//				  RX_Index++;
-//				  if(RX_Index == sizeOfBuffer)
-//				  	{
-//				  		RX_Index=0;
-//				  		uint8_t i=0;
-//				  		for(i=0;i<sizeOfBuffer;i++)
-//				  		{
-//				  			rxBuffer[i]=0;
-//				  		}
-//				  	}
-//			HAL_I2C_Slave_Receive_IT(&hspi1, &i2cSlaveRX, 1);
 		}
 
 	}
 }
 
 void HAL_I2C_SlaveTxCpltCallback(I2C_HandleTypeDef *hi2c) {
-	static uint8_t charr = 'H';
+	static uint8_t charr = 'D';
 	if (hi2c->Instance == I2C1) {
-		if(charr == 'H') {
-			hi2c->pBuffPtr[0] = 'L';
-			charr = 'L';
+		if(charr == 'D') {
+			hi2c->pBuffPtr[0] = 'N';
+			charr = 'N';
 		} else {
-			hi2c->pBuffPtr[0] = 'H';
-			charr = 'H';
+			hi2c->pBuffPtr[0] = 'N';
+			charr = 'N';
 		}
 	}
 }
