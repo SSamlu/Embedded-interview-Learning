@@ -22,9 +22,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-uint8_t rx = 0;
+uint8_t rx[10];
 #define sizeOfBuffer 10
-
+uint8_t  fac_us = 0;
 uint8_t i2cSlaveRX = 0b00000000;
 /* USER CODE END Includes */
 
@@ -62,6 +62,8 @@ static void MX_TIM2_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+
 void modeSDA(uint8_t modeGPIO) {
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
 	GPIO_InitStruct.Pin = SDA_Master_Pin;
@@ -72,46 +74,42 @@ void modeSDA(uint8_t modeGPIO) {
 }
 
 void delayUs(uint16_t timeDelay){
-    __HAL_TIM_SET_COUNTER(&htim2,0);  // set the counter value a 0
-    while (__HAL_TIM_GET_COUNTER(&htim2) < timeDelay);  // wait for the counter to reach the us input in the parameter
+	__HAL_TIM_SET_COUNTER(&htim2,0);  // set the counter value a 0
+	while (__HAL_TIM_GET_COUNTER(&htim2) < timeDelay);  // wait for the counter to reach the us input in the parameter
 }
 
 void I2C_start() {
+	HAL_GPIO_WritePin(GPIOB, SCL_Master_Pin, HIGH_MODE);
+	HAL_GPIO_WritePin(GPIOB, SDA_Master_Pin, HIGH_MODE);
+	delayUs(10);
 	HAL_GPIO_WritePin(GPIOB, SDA_Master_Pin, LOW_MODE);
-	delayUs(100);
+	delayUs(10);
 	HAL_GPIO_WritePin(GPIOB, SCL_Master_Pin, LOW_MODE);
-	delayUs(100);
 }
 void I2C_Stop(void){
+	HAL_GPIO_WritePin(GPIOB, SCL_Master_Pin, LOW_MODE);
+	HAL_GPIO_WritePin(GPIOB, SDA_Master_Pin, LOW_MODE);
+	delayUs(10);
 	HAL_GPIO_WritePin(GPIOB, SDA_Master_Pin, HIGH_MODE);
-	delayUs(100);
+	delayUs(10);
 	HAL_GPIO_WritePin(GPIOB, SCL_Master_Pin, HIGH_MODE);
-	delayUs(100);
 }
 
 void I2C_Send_Byte(uint8_t txBuffer){
 //	uint8_t txBuffer =  txd;0b01001110, 0b01000100, 0b00001
+	modeSDA(GPIO_MODE_OUTPUT_PP);
+	HAL_GPIO_WritePin(GPIOB, SCL_Master_Pin, LOW_MODE);
 	for(uint8_t i = 0; i < 8; i++) {
 		HAL_GPIO_WritePin(GPIOB, SDA_Master_Pin, ((txBuffer & 0x80) > 0) ? HIGH_MODE : LOW_MODE);
-		delayUs(100);
-		HAL_GPIO_WritePin(GPIOB, SCL_Master_Pin, HIGH_MODE);
-		delayUs(100);
-		HAL_GPIO_WritePin(GPIOB, SCL_Master_Pin, LOW_MODE);
-		delayUs(100);
+		delayUs(10);
 		txBuffer <<= 1;
+		HAL_GPIO_WritePin(GPIOB, SCL_Master_Pin, HIGH_MODE);
+		delayUs(10);
+		HAL_GPIO_WritePin(GPIOB, SCL_Master_Pin, LOW_MODE);
 	}
-	modeSDA(GPIO_MODE_INPUT); //listen ACK is 0 or 1
-
-	if(HAL_GPIO_ReadPin(GPIOB, SDA_Master_Pin) == ACK) {
-		modeSDA(GPIO_MODE_OUTPUT_PP);
-		I2C_Stop();
-	}
-	HAL_GPIO_WritePin(GPIOB, SCL_Master_Pin, HIGH_MODE);
-	delayUs(100);
-	HAL_GPIO_WritePin(GPIOB, SCL_Master_Pin, LOW_MODE);
-	delayUs(100);
-	modeSDA(GPIO_MODE_OUTPUT_PP);
 }
+
+
 void I2C_Ack(void){
 	HAL_GPIO_WritePin(GPIOB, SCL_Master_Pin, LOW_MODE);
 	modeSDA(GPIO_MODE_OUTPUT_PP);
@@ -120,9 +118,8 @@ void I2C_Ack(void){
 	HAL_GPIO_WritePin(GPIOB, SCL_Master_Pin, HIGH_MODE);
 	delayUs(10);
 	HAL_GPIO_WritePin(GPIOB, SCL_Master_Pin, LOW_MODE);
-	delayUs(10);
 }
-void I2C_NAck(void){
+void I2C_Nack(void){
 	HAL_GPIO_WritePin(GPIOB, SCL_Master_Pin, LOW_MODE);
 	modeSDA(GPIO_MODE_OUTPUT_PP);
 	HAL_GPIO_WritePin(GPIOB, SDA_Master_Pin, NACK);
@@ -133,16 +130,36 @@ void I2C_NAck(void){
 	delayUs(10);
 }
 
-uint8_t I2C_Wait_Ack(void){
-	uint8_t time=0;
-	HAL_GPIO_WritePin(GPIOB, SDA_Master_Pin, HIGH_MODE);
+uint8_t I2C_Read_Byte(unsigned char ack){
+	uint8_t rxBuffer = 0b1000100;
 	modeSDA(GPIO_MODE_INPUT);
-	delayUs(1);
+	for(uint8_t i = 0; i < 8; i++) {
+		HAL_GPIO_WritePin(GPIOB, SCL_Master_Pin, HIGH_MODE);
+		rxBuffer <<= 1;
+		rxBuffer |= HAL_GPIO_ReadPin(GPIOB, SDA_Master_Pin);
+		delayUs(10);
+		HAL_GPIO_WritePin(GPIOB, SCL_Master_Pin, LOW_MODE);
+		delayUs(10);
+	}
+	if(ack == 0){
+		I2C_Ack();
+	} else {
+	 I2C_Nack();
+	}
+	return rxBuffer;
+}
+
+uint8_t I2C_Wait_Ack(void){
+	uint8_t time = 0;
+//	HAL_GPIO_WritePin(GPIOB, SDA_Master_Pin, HIGH_MODE);
+//	delay_us(2);
+	modeSDA(GPIO_MODE_INPUT);
+	delayUs(10);
 	HAL_GPIO_WritePin(GPIOB, SCL_Master_Pin, HIGH_MODE);
-	delayUs(1);
+	delayUs(10);
 	while(HAL_GPIO_ReadPin(GPIOB, SDA_Master_Pin)){
 		time++;
-		if(time>250) {
+		if(time > 250) {
 			I2C_Stop();
 			return 1;
 		}
@@ -151,48 +168,29 @@ uint8_t I2C_Wait_Ack(void){
 	return 0;
 }
 
-uint8_t I2C_Read_Byte(unsigned char ack){
-	uint8_t rxBuffer = 0b1000100;
-	modeSDA(GPIO_MODE_INPUT);
-	for(uint8_t i = 0; i < 8; i++) {
-		HAL_GPIO_WritePin(GPIOB, SCL_Master_Pin, HIGH_MODE);
-		rxBuffer <<= 1;
-		rxBuffer |= HAL_GPIO_ReadPin(GPIOB, SDA_Master_Pin);
-		delayUs(100);
-		HAL_GPIO_WritePin(GPIOB, SCL_Master_Pin, LOW_MODE);
-		delayUs(100);
-	}
-//	modeSDA(GPIO_MODE_OUTPUT_PP);
-//	HAL_GPIO_WritePin(GPIOB, SDA_Master_Pin, ACK);
-//	HAL_GPIO_WritePin(GPIOB, SCL_Master_Pin, HIGH_MODE);
-//	delayUs(100);
-//	HAL_GPIO_WritePin(GPIOB, SCL_Master_Pin, LOW_MODE);
-//	delayUs(100);
-	if(!ack){
-		I2C_Ack();
-	} else {
-	 I2C_NAck();
-	}
-	return rxBuffer;
-}
-
 void sendDataByI2C(){
 	I2C_start();
 	I2C_Send_Byte(0x06<<1|0); // bit address
+	while(I2C_Wait_Ack());
 	I2C_Send_Byte(0b01000100);
+	while(I2C_Wait_Ack());
 	I2C_Stop();
 	HAL_Delay(1000);
 	I2C_start();
 	I2C_Send_Byte(0x06<<1|0); // bit address
+	while(I2C_Wait_Ack());
 	I2C_Send_Byte(0b01001110);
+	while(I2C_Wait_Ack());
 	I2C_Stop();
 	HAL_Delay(1000);
 }
 void readDataByI2C(){
 	uint8_t rxBuffer = 0;
 	I2C_start();
-	I2C_Send_Byte(0x06<<1|1); // bit address
+	I2C_Send_Byte(0x06<<1|0); // bit address
+	while(I2C_Wait_Ack());
 	rxBuffer = I2C_Read_Byte(0);
+	while(I2C_Wait_Ack());
 	I2C_Stop();
 	HAL_Delay(1000);
 }
@@ -201,9 +199,9 @@ void HAL_I2C_SlaveRxCpltCallback(I2C_HandleTypeDef *hi2c) {
 	// Xử lý dữ liệu nhận được từ Master
 	if (hi2c->Instance == I2C1) {
 		if (hi2c->XferCount == 1) { // Chỉ nhận được 1 byte dữ liệu
-			rx = i2cSlaveRX;
+			rx[0] = i2cSlaveRX;
 		}
-
+		HAL_I2C_Slave_Seq_Receive_IT(&hi2c1, &i2cSlaveRX, 1, I2C_FIRST_AND_LAST_FRAME);
 	}
 }
 
@@ -255,7 +253,8 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start(&htim2);
   HAL_I2C_Init(&hi2c1);
-  HAL_I2C_EnableListen_IT(&hi2c1);
+//  HAL_I2C_EnableListen_IT(&hi2c1);
+  HAL_I2C_Slave_Seq_Receive_IT(&hi2c1, &i2cSlaveRX, 1, I2C_FIRST_AND_LAST_FRAME);
   I2C_Stop();
   /* USER CODE END 2 */
 
